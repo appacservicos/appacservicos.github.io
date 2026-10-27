@@ -26,16 +26,68 @@
             padding: 10px 5px;
         }
 
-        /* Cor oficial Azul da AC SERVIÇOS (#003882) */
-        .bg-blue-ac {
-            background-color: #003882 !important;
+        .bg-blue-ac { background-color: #003882 !important; }
+        .text-blue-ac { color: #003882 !important; }
+
+        /* ESTILOS DO FORMULÁRIO INICIAL MÓVEL (ETAPA 1) */
+        .form-mobile-wrap {
+            max-width: 650px;
+            margin: 10px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        .text-blue-ac {
-            color: #003882 !important;
+        .form-mobile-wrap h2 {
+            color: #003882;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #003882;
+            padding-bottom: 4px;
+            margin-top: 14px;
         }
 
-        /* Container Folha A4 Otimizado para Desktop / Impressão */
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .field-group label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .field-group input, .field-group select, .field-group textarea {
+            width: 100%;
+            min-height: 40px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 14px;
+            background: #f8fafc;
+        }
+
+        .field-group input:focus, .field-group select:focus, .field-group textarea:focus {
+            outline: none;
+            border-color: #003882;
+            background: #ffffff;
+        }
+
+        .item-card-mobile {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        /* CONTAINER FOLHA A4 IDÊNTICO AO ANEXO (ETAPA 2) */
         .page-a4 {
             width: 210mm;
             max-height: 295mm;
@@ -51,7 +103,6 @@
             overflow: hidden;
         }
 
-        /* Estrutura compacta das tabelas */
         .os-table {
             width: 100%;
             border-collapse: collapse;
@@ -68,7 +119,6 @@
             word-wrap: break-word;
         }
 
-        /* Cabeçalho azul com texto branco em negrito */
         .header-blue-text-white {
             background-color: #003882 !important;
             color: #ffffff !important;
@@ -82,7 +132,6 @@
             padding: 4px 2px;
         }
 
-        /* Inputs e Selects */
         .input-field, .select-field {
             width: 100%;
             border: none;
@@ -96,22 +145,13 @@
             -webkit-appearance: none;
         }
 
-        .input-field:focus, .select-field:focus {
-            background-color: #e0f2fe;
-            border-radius: 2px;
-        }
-
-        /* Ocultar spinners dos inputs numéricos */
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
+        input[type=number] { -moz-appearance: textfield; }
 
-        /* Botões Táteis */
         .touch-btn {
             min-width: 30px;
             min-height: 28px;
@@ -121,10 +161,8 @@
             border-radius: 4px;
             touch-action: manipulation;
             font-weight: bold;
-            transition: all 0.15s ease;
         }
 
-        /* Canvas de Assinatura */
         canvas.signature-canvas {
             width: 100%;
             height: 65px;
@@ -133,53 +171,29 @@
             background-color: #ffffff;
         }
 
-        /* ADAPTAÇÃO EXCLUSIVA PARA TELA DE CELULAR (Preenchimento sem deformar) */
         @media screen and (max-width: 768px) {
-            body {
-                padding: 4px;
-            }
-
+            body { padding: 4px; }
             .page-a4 {
                 width: 100% !important;
                 max-height: none !important;
                 padding: 6px !important;
                 box-shadow: none !important;
             }
-
-            /* Permite rolagem lateral suave se necessário para tabelas sem esmagar o texto */
             .table-responsive-mobile {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
             }
-
-            .os-table td, .os-table th {
-                padding: 4px 3px !important;
-                font-size: 11px !important; /* Texto legível no celular */
-            }
-
-            .input-field, .select-field {
-                font-size: 11px !important;
-                min-height: 22px;
-            }
         }
 
-        /* REGRAS RÍGIDAS DE IMPRESSÃO E GERAÇÃO DE PDF A4 (Mantém a aparência idêntica ao anexo) */
         @page {
             size: A4 portrait;
             margin: 0mm;
         }
 
         @media print {
-            body {
-                background: #ffffff !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            .no-print {
-                display: none !important;
-            }
-
+            body { background: #ffffff !important; padding: 0 !important; margin: 0 !important; }
+            .no-print, #etapa-formulario-inicial { display: none !important; }
+            #etapa-os-documento { display: block !important; }
             .page-a4 {
                 box-shadow: none !important;
                 border: 1px solid #000000 !important;
@@ -190,291 +204,317 @@
                 margin: 0 auto !important;
                 padding: 5mm 6mm !important;
             }
-
-            .os-table td, .os-table th {
-                padding: 3px 4px !important;
-                font-size: 10px !important;
-            }
-
-            .input-field, .select-field {
-                font-size: 10px !important;
-            }
-
-            .touch-btn, .col-acoes {
-                display: none !important;
-            }
+            .touch-btn, .col-acoes { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- PAINEL SUPERIOR DE CONTROLES -->
-    <div class="max-w-[210mm] mx-auto mb-3 bg-white p-2.5 border border-black rounded-lg shadow-lg no-print">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span class="bg-blue-ac text-white font-bold px-2.5 py-1 rounded text-xs shadow">
-                    <i class="fa-solid fa-file-invoice mr-1"></i> AC SERVIÇOS
-                </span>
-                <span class="text-xs font-bold text-gray-700">Ordem de Serviço (A4 Página Única)</span>
-            </div>
+    <!-- ETAPA 1: FORMULÁRIO DE PREENCHIMENTO RÁPIDO PARA CELULAR -->
+    <div id="etapa-formulario-inicial" class="form-mobile-wrap no-print">
+        <div class="flex items-center gap-2 mb-3">
+            <span class="bg-blue-ac text-white font-bold px-2 py-1 rounded text-xs">AC SERVIÇOS</span>
+            <span class="text-sm font-bold text-gray-800">Preenchimento da O.S. (Celular)</span>
+        </div>
 
-            <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
-                <button onclick="adicionarLinha()" type="button" class="touch-btn bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 text-xs shadow">
-                    <i class="fa-solid fa-plus mr-1"></i> Item
-                </button>
-                <button onclick="gerarPDF()" type="button" class="touch-btn bg-blue-ac hover:bg-blue-900 text-white px-2.5 text-xs shadow">
-                    <i class="fa-solid fa-file-pdf mr-1"></i> Baixar PDF
-                </button>
-                <button onclick="executarImpressaoOuCompartilhamento()" type="button" class="touch-btn bg-emerald-700 hover:bg-emerald-800 text-white px-2.5 text-xs shadow">
-                    🖨️ Imprimir
-                </button>
-                <button onclick="limparAssinaturas()" type="button" class="touch-btn bg-amber-600 hover:bg-amber-700 text-white px-2.5 text-xs shadow">
-                    <i class="fa-solid fa-eraser mr-1"></i> Limpar Assinaturas
-                </button>
+        <h2>Dados do Cliente</h2>
+        <div class="field-group">
+            <label>Cliente:</label>
+            <input type="text" id="m-cliente" placeholder="Nome do cliente">
+        </div>
+        <div class="field-group">
+            <label>Endereço:</label>
+            <input type="text" id="m-endereco" placeholder="Endereço completo">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+            <div class="field-group">
+                <label>UF:</label>
+                <select id="m-uf" onchange="carregarCidadesForm(this.value)" class="cursor-pointer">
+                    <option value="PI">PI</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label>Cidade:</label>
+                <select id="m-cidade" onchange="buscarCepPorCidadeForm(this.value)" class="cursor-pointer">
+                    <option value="Acauã">Acauã</option>
+                </select>
             </div>
         </div>
+        <div class="grid grid-cols-2 gap-2">
+            <div class="field-group">
+                <label>Contato:</label>
+                <input type="text" id="m-contato" placeholder="Telefone / Zap">
+            </div>
+            <div class="field-group">
+                <label>CEP:</label>
+                <input type="text" id="m-cep" placeholder="00000-000" maxlength="9" oninput="consultarViaCEPForm(this.value)">
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+            <div class="field-group">
+                <label>Chamado (Cham): [Automático]</label>
+                <input type="text" id="m-cham" readonly class="bg-gray-100 font-bold text-blue-ac">
+            </div>
+            <div class="field-group">
+                <label>Atendido por (Técnico):</label>
+                <input type="text" id="m-atendido" placeholder="Nome do técnico" oninput="atualizarChamadoTecnico()">
+            </div>
+        </div>
+
+        <h2>Equipamento e Serviço</h2>
+        <div class="grid grid-cols-2 gap-2">
+            <div class="field-group">
+                <label>Serviço:</label>
+                <input type="text" id="m-servico" placeholder="Ex: Manutenção">
+            </div>
+            <div class="field-group">
+                <label>Equipamento:</label>
+                <input type="text" id="m-equipamento" placeholder="Ex: Cadeira Odonto">
+            </div>
+        </div>
+
+        <h2>Peças e Materiais (Itens e Garantias)</h2>
+        <div id="lista-itens-mobile">
+            <!-- Itens adicionados dinamicamente aqui -->
+        </div>
+        <button type="button" onclick="adicionarItemMobile()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded text-xs mb-3 flex items-center gap-1">
+            <i class="fa-solid fa-plus"></i> Adicionar Peça / Item
+        </button>
+
+        <button type="button" onclick="gerarOrdemDeServico()" class="w-full bg-blue-ac text-white font-bold py-3 rounded-lg text-base shadow-lg mt-2 flex items-center justify-center gap-2">
+            🚀 Gerar Ordem de Serviço A4
+        </button>
     </div>
 
-    <!-- FOLHA DA ORDEM DE SERVIÇO (A4 - RIGOROSAMENTE PÁGINA ÚNICA) -->
-    <div id="os-documento" class="page-a4">
-        <div>
-            <!-- 1. CABEÇALHO DA EMPRESA COM NÚMERO AUTOMÁTICO AC- -->
-            <table class="os-table">
-                <tr>
-                    <td class="bg-blue-ac text-white w-1/2 p-2 border-black">
-                        <div class="flex items-center gap-2.5">
-                            <img src="AClogomarca.png" alt="AC SERVIÇOS Logo" class="h-10 w-auto object-contain shrink-0" onerror="this.onerror=null; this.outerHTML='<div class=\'w-10 h-10 border-2 border-white rounded-full flex items-center justify-center font-bold text-lg leading-none text-white shrink-0\'>AC</div>';">
-                            <div>
-                                <div class="font-bold text-base leading-tight tracking-wider text-white">AC SERVIÇOS</div>
-                                <div class="text-[8.5px] text-gray-200">CONSERTO DE EQUIPAMENTOS ODONTOLÓGICOS</div>
-                                <div class="text-[11px] font-bold mt-0.5 text-white">(99) 98456-4555</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="w-1/2 p-2 text-left border-black bg-white">
-                        <div class="flex items-center justify-start gap-1 font-bold text-xs">
-                            <span class="text-black shrink-0">ORDEM DE SERVIÇO:</span>
-                            <div class="flex items-center w-full">
-                                <input type="text" id="num_os" value="" placeholder="AC-000000" class="input-field font-bold text-xs text-blue-ac border-b border-gray-400 focus:border-black">
-                                <button type="button" onclick="gerarNumeroOSAutomatico()" title="Gerar novo número de OS" class="no-print text-gray-500 hover:text-black ml-1 text-[10px] p-0.5 shrink-0">
-                                    <i class="fa-solid fa-arrows-rotate"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
 
-            <!-- 2. DADOS DO CLIENTE E LOCALIZAÇÃO COM VIACEP -->
-            <table class="os-table">
-                <tr>
-                    <td colspan="5">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">Cliente:</span>
-                            <input type="text" id="inp-cliente" value="" placeholder="" class="input-field font-bold">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="5">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">Endereço:</span>
-                            <input type="text" id="inp-endereco" value="" placeholder="" class="input-field">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="w-[18%]">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">UF:</span>
-                            <select id="select-uf" onchange="carregarCidades(this.value)" class="select-field font-bold cursor-pointer">
-                            </select>
-                        </div>
-                    </td>
-                    <td class="w-[38%]">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">Cidade:</span>
-                            <select id="select-cidade" onchange="buscarCepCidade(this.value)" class="select-field cursor-pointer">
-                                <option value="">Selecione...</option>
-                            </select>
-                        </div>
-                    </td>
-                    <td colspan="3" class="w-[44%]">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">Contato:</span>
-                            <input type="text" id="inp-contato" value="" placeholder="" class="input-field">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="w-[24%]">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">CEP:</span>
-                            <input type="text" id="input-cep" value="" maxlength="9" placeholder="00000-000" oninput="consultarViaCEP(this.value)" class="input-field font-bold">
-                        </div>
-                    </td>
-                    <td class="w-[18%]">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">Gar:</span>
-                            <select id="select-garantia" class="select-field font-bold cursor-pointer">
-                                <option value="SIM">SIM</option>
-                                <option value="NÃO">NÃO</option>
-                            </select>
-                        </div>
-                    </td>
-                    <td class="w-[24%]">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center w-full">
-                                <span class="font-bold mr-1 shrink-0">Cham:</span>
-                                <input type="text" id="input-chamado" value="" placeholder="" class="input-field font-bold">
-                            </div>
-                            <button type="button" onclick="gerarChamadoAutomatico()" title="Gerar novo chamado" class="no-print text-gray-500 hover:text-black ml-1 text-[10px] p-0.5">
-                                <i class="fa-solid fa-arrows-rotate"></i>
-                            </button>
-                        </div>
-                    </td>
-                    <td class="w-[18%]">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">Hora:</span>
-                            <input type="text" id="input-hora" value="" placeholder="00:00" class="input-field font-bold">
-                        </div>
-                    </td>
-                    <td class="w-[16%]">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">Inst:</span>
-                            <input type="text" id="inp-inst" value="" placeholder="" class="input-field">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="5">
-                        <div class="flex items-center">
-                            <span class="font-bold mr-1 shrink-0">Atendido por:</span>
-                            <input type="text" id="inp-atendido-por" value="" placeholder="" class="input-field">
-                        </div>
-                    </td>
-                </tr>
-            </table>
+    <!-- ETAPA 2: DOCUMENTO OFICIAL A4 (OCULTO ATÉ CLICAR EM GERAR) -->
+    <div id="etapa-os-documento" class="hidden">
+        
+        <!-- BARRA DE AÇÕES -->
+        <div class="max-w-[210mm] mx-auto mb-3 bg-white p-2.5 border border-black rounded-lg shadow-lg no-print">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+                <button onclick="voltarParaFormulario()" type="button" class="touch-btn bg-gray-600 hover:bg-gray-700 text-white px-2.5 text-xs shadow">
+                    ✏️ Voltar e Editar
+                </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="adicionarLinha()" type="button" class="touch-btn bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 text-xs shadow">
+                        + Item A4
+                    </button>
+                    <button onclick="gerarPDF()" type="button" class="touch-btn bg-blue-ac hover:bg-blue-900 text-white px-2.5 text-xs shadow">
+                        📄 Baixar PDF
+                    </button>
+                    <button onclick="executarImpressaoOuCompartilhamento()" type="button" class="touch-btn bg-emerald-700 hover:bg-emerald-800 text-white px-2.5 text-xs shadow">
+                        🖨️ Imprimir
+                    </button>
+                    <button onclick="limparAssinaturas()" type="button" class="touch-btn bg-amber-600 hover:bg-amber-700 text-white px-2.5 text-xs shadow">
+                        🧹 Limpar Assinaturas
+                    </button>
+                </div>
+            </div>
+        </div>
 
-            <!-- 3. DETALHES DE SERVIÇO E EQUIPAMENTO -->
-            <div class="table-responsive-mobile">
+        <!-- FOLHA DA ORDEM DE SERVIÇO EXATA DO ANEXO -->
+        <div id="os-documento" class="page-a4">
+            <div>
+                <!-- CABEÇALHO -->
                 <table class="os-table">
                     <tr>
-                        <th colspan="6" class="text-center font-bold text-[10px] py-1 text-black bg-gray-50 border-black">
-                            Serviços Executados [ Serviço:
-                            <input type="text" value="" placeholder="" class="input-field font-bold w-32 text-center border-b border-gray-400 inline-block focus:border-black text-blue-ac">
-                            ] [ Equipamento:
-                            <input type="text" value="" placeholder="" class="input-field font-bold w-40 text-center border-b border-gray-400 inline-block focus:border-black text-blue-ac">
-                            ]
-                        </th>
+                        <td class="bg-blue-ac text-white w-1/2 p-2 border-black">
+                            <div class="flex items-center gap-2.5">
+                                <img src="AClogomarca.png" alt="AC SERVIÇOS Logo" class="h-10 w-auto object-contain shrink-0" onerror="this.onerror=null; this.outerHTML='<div class=\'w-10 h-10 border-2 border-white rounded-full flex items-center justify-center font-bold text-lg text-white shrink-0\'>AC</div>';">
+                                <div>
+                                    <div class="font-bold text-base leading-tight tracking-wider text-white">AC SERVIÇOS</div>
+                                    <div class="text-[8.5px] text-gray-200">CONSERTO DE EQUIPAMENTOS ODONTOLÓGICOS</div>
+                                    <div class="text-[11px] font-bold mt-0.5 text-white">(99) 98456-4555</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="w-1/2 p-2 text-left border-black bg-white">
+                            <div class="flex items-center justify-start gap-1 font-bold text-xs">
+                                <span class="text-black shrink-0">ORDEM DE SERVIÇO:</span>
+                                <div class="flex items-center w-full">
+                                    <input type="text" id="num_os" value="" class="input-field font-bold text-xs text-blue-ac border-b border-gray-400 focus:border-black">
+                                    <button type="button" onclick="gerarNumeroOSAutomatico()" title="Gerar número" class="no-print text-gray-500 hover:text-black ml-1 text-[10px] p-0.5 shrink-0">
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
-
-                    <!-- CABEÇALHO AZUL (#003882) COM TEXTO BRANCO PURO NEGRITO -->
-                    <tr class="header-blue-text-white text-[10px]">
-                        <th class="w-16 text-center border-black">QTD</th>
-                        <th class="w-20 text-left border-black">CÓDIGO</th>
-                        <th class="text-left border-black">DETALHAMENTO</th>
-                        <th class="w-20 text-right border-black">V.UNIT.</th>
-                        <th class="w-24 text-right border-black">VALOR TOTAL</th>
-                        <th class="w-10 text-center border-black no-print col-acoes">#</th>
-                    </tr>
-
-                    <tbody id="corpo-tabela-itens">
-                        <!-- Linha inicial adicionada via JS -->
-                    </tbody>
                 </table>
-            </div>
 
-            <!-- 4. OBSERVAÇÕES E RESUMO FINANCEIRO (COM DESCONTO) -->
-            <table class="os-table">
-                <tr>
-                    <td class="w-[65%] align-top p-1.5 border-black">
-                        <span class="font-bold block mb-0.5 text-[10px]">Observações:</span>
-                        <textarea id="obs_texto" rows="4" placeholder="" class="input-field w-full resize-none text-[10px]"></textarea>
-                    </td>
-                    <td class="w-[35%] p-0 align-top border-black">
-                        <table class="w-full h-full border-collapse">
-                            <tr>
-                                <td class="font-bold border-b border-black py-1 px-1.5 text-left bg-gray-50 text-[10px]">TOTAL PÇ</td>
-                                <td id="lbl-total-pecas" class="border-b border-black py-1 px-1.5 text-right font-bold text-xs">R$ 0,00</td>
-                            </tr>
-                            <tr>
-                                <td class="font-bold border-b border-black py-1 px-1.5 text-left bg-gray-50 text-[10px]">SERVIÇO</td>
-                                <td class="border-b border-black py-1 px-1.5 text-right">
-                                    <div class="flex justify-end items-center gap-0.5">
-                                        <span class="text-[10px] font-bold">R$</span>
-                                        <input type="number" id="inp-servico" step="0.01" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs" placeholder="0.00">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-bold border-b border-black py-1 px-1.5 text-left bg-gray-50 text-[10px]">DESCONTO</td>
-                                <td class="border-b border-black py-1 px-1.5 text-right">
-                                    <div class="flex justify-end items-center gap-0.5">
-                                        <span class="text-[10px] font-bold text-red-600">- R$</span>
-                                        <input type="number" id="inp-desconto" step="0.01" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs text-red-600" placeholder="0.00">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-bold py-1 px-1.5 text-left bg-gray-100 text-[10px]">TOTAL GERAL</td>
-                                <td id="lbl-total-geral" class="font-bold py-1 px-1.5 text-right text-xs text-blue-ac">R$ 0,00</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
+                <!-- DADOS DO CLIENTE -->
+                <table class="os-table">
+                    <tr>
+                        <td>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-1 shrink-0">Cliente:</span>
+                                <input type="text" id="os-cliente" class="input-field font-bold">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-1 shrink-0">Endereço:</span>
+                                <input type="text" id="os-endereco" class="input-field">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="grid grid-cols-12 gap-1 items-center">
+                                <div class="col-span-3 flex items-center">
+                                    <span class="font-bold mr-1 shrink-0">UF:</span>
+                                    <input type="text" id="os-uf" class="input-field font-bold">
+                                </div>
+                                <div class="col-span-5 flex items-center border-l border-black pl-1">
+                                    <span class="font-bold mr-1 shrink-0">Cidade:</span>
+                                    <input type="text" id="os-cidade" class="input-field">
+                                </div>
+                                <div class="col-span-4 flex items-center border-l border-black pl-1">
+                                    <span class="font-bold mr-1 shrink-0">Contato:</span>
+                                    <input type="text" id="os-contato" class="input-field">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="grid grid-cols-12 gap-1 items-center">
+                                <div class="col-span-4 flex items-center">
+                                    <span class="font-bold mr-1 shrink-0">CEP:</span>
+                                    <input type="text" id="os-cep" placeholder="00000-000" class="input-field font-bold">
+                                </div>
+                                <div class="col-span-4 flex items-center border-l border-black pl-1">
+                                    <span class="font-bold mr-1 shrink-0">Cham:</span>
+                                    <input type="text" id="os-cham" class="input-field font-bold">
+                                </div>
+                                <div class="col-span-4 flex items-center border-l border-black pl-1">
+                                    <span class="font-bold mr-1 shrink-0">Hora:</span>
+                                    <input type="text" id="input-hora" class="input-field font-bold">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="flex items-center">
+                                <span class="font-bold mr-1 shrink-0">Atendido por:</span>
+                                <input type="text" id="os-atendido" class="input-field">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
 
-            <!-- 5. TERMOS DE GARANTIA -->
-            <table class="os-table">
-                <tr>
-                    <td class="py-1 px-1.5 text-center text-[9.5px]">
-                        O equipamento foi consertado e revisado, estando em perfeitas condições de funcionamento.
-                    </td>
-                </tr>
-            </table>
-
-            <!-- QUADRO DE RÓTULOS DE ASSINATURA -->
-            <table class="os-table">
-                <tr class="font-bold text-center text-[10px] bg-gray-50">
-                    <td class="w-1/4 py-0.5">VISTO</td>
-                    <td class="w-1/4 py-0.5">DATA</td>
-                    <td class="w-1/4 py-0.5">TÉCNICO / RESPONSÁVEL</td>
-                    <td class="w-1/4 py-0.5">CLIENTE</td>
-                </tr>
-                <tr>
-                    <td class="text-center align-middle p-0.5">
-                        <input type="text" placeholder="" class="input-field text-center">
-                    </td>
-                    <td class="text-center align-middle p-0.5">
-                        <input type="text" id="data-atual" class="input-field text-center font-bold">
-                    </td>
-                    <td colspan="2" class="p-0 border-0"></td>
-                </tr>
-            </table>
-
-            <!-- CANVAS COMPACTO PARA ASSINATURAS DIGITAIS -->
-            <div class="border border-black border-t-0 grid grid-cols-2 divide-x divide-black relative min-h-[70px]">
-                <div class="relative p-0.5">
-                    <span class="text-[9px] font-bold text-gray-500 absolute top-0.5 left-1.5 pointer-events-none">Assinatura do Técnico</span>
-                    <canvas id="canvas-tecnico" class="signature-canvas"></canvas>
-                    <button type="button" onclick="limparCanvas('tecnico')" class="no-print absolute bottom-0.5 right-0.5 touch-btn bg-gray-100 text-gray-700 text-[9px] px-1.5 py-0 border border-gray-300 hover:bg-gray-200 min-h-[20px]">
-                        Limpar
-                    </button>
+                <!-- TABELA DE ITENS (SEM COLUNA DE GARANTIA) -->
+                <div class="table-responsive-mobile">
+                    <table class="os-table">
+                        <tr>
+                            <th colspan="6" class="text-center font-bold text-[10px] py-1 text-black bg-gray-50 border-black whitespace-nowrap overflow-hidden">
+                                Serviços Executados &nbsp;|&nbsp; Serviço: <input type="text" id="os-servico" class="input-field font-bold w-28 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;"> &nbsp;|&nbsp; Equipamento: <input type="text" id="os-equipamento" class="input-field font-bold w-32 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;">
+                            </th>
+                        </tr>
+                        <tr class="header-blue-text-white text-[10px]">
+                            <th class="w-16 text-center border-black">QTD</th>
+                            <th class="w-20 text-left border-black">CÓDIGO</th>
+                            <th class="text-left border-black">DETALHAMENTO</th>
+                            <th class="w-20 text-right border-black">V.UNIT.</th>
+                            <th class="w-24 text-right border-black">VALOR TOTAL</th>
+                            <th class="w-10 text-center border-black no-print col-acoes">#</th>
+                        </tr>
+                        <tbody id="corpo-tabela-itens">
+                            <!-- Linhas geradas via script -->
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="relative p-0.5">
-                    <span class="text-[9px] font-bold text-gray-500 absolute top-0.5 left-1.5 pointer-events-none">Assinatura do Cliente</span>
-                    <canvas id="canvas-cliente" class="signature-canvas"></canvas>
-                    <button type="button" onclick="limparCanvas('cliente')" class="no-print absolute bottom-0.5 right-0.5 touch-btn bg-gray-100 text-gray-700 text-[9px] px-1.5 py-0 border border-gray-300 hover:bg-gray-200 min-h-[20px]">
-                        Limpar
-                    </button>
+                <!-- OBSERVAÇÕES E TOTAIS -->
+                <table class="os-table">
+                    <tr>
+                        <td class="w-[65%] align-top p-1.5 border-black">
+                            <span class="font-bold block mb-0.5 text-[10px]">Observações:</span>
+                            <textarea id="os-obs" rows="4" class="input-field w-full resize-none text-[10px]"></textarea>
+                        </td>
+                        <td class="w-[35%] p-0 align-top border-black">
+                            <table class="w-full h-full border-collapse">
+                                <tr>
+                                    <td class="font-bold border-b border-black py-1 px-1.5 text-left bg-gray-50 text-[10px]">TOTAL PÇ</td>
+                                    <td id="lbl-total-pecas" class="border-b border-black py-1 px-1.5 text-right font-bold text-xs">R$ 0,00</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold border-b border-black py-1 px-1.5 text-left bg-gray-50 text-[10px]">SERVIÇO</td>
+                                    <td class="border-b border-black py-1 px-1.5 text-right">
+                                        <div class="flex justify-end items-center gap-0.5">
+                                            <span class="text-[10px] font-bold">R$</span>
+                                            <input type="number" id="inp-servico" step="0.01" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs" placeholder="0.00">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold border-b border-black py-1 px-1.5 text-left bg-gray-50 text-[10px]">DESCONTO</td>
+                                    <td class="border-b border-black py-1 px-1.5 text-right">
+                                        <div class="flex justify-end items-center gap-0.5">
+                                            <span class="text-[10px] font-bold text-red-600">- R$</span>
+                                            <input type="number" id="inp-desconto" step="0.01" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs text-red-600" placeholder="0.00">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold py-1 px-1.5 text-left bg-gray-100 text-[10px]">TOTAL GERAL</td>
+                                    <td id="lbl-total-geral" class="font-bold py-1 px-1.5 text-right text-xs text-blue-ac">R$ 0,00</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- TERMOS -->
+                <table class="os-table">
+                    <tr>
+                        <td class="py-1 px-1.5 text-center text-[9.5px]">
+                            O equipamento foi consertado e revisado, estando em perfeitas condições de funcionamento.
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- VISTO, DATA E ASSINATURAS -->
+                <table class="os-table">
+                    <tr class="font-bold text-center text-[10px] bg-gray-50">
+                        <td class="w-1/4 py-0.5">VISTO</td>
+                        <td class="w-1/4 py-0.5">DATA</td>
+                        <td class="w-1/4 py-0.5">TÉCNICO / RESPONSÁVEL</td>
+                        <td class="w-1/4 py-0.5">CLIENTE</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center align-middle p-0.5">
+                            <input type="text" class="input-field text-center">
+                        </td>
+                        <td class="text-center align-middle p-0.5">
+                            <input type="text" id="data-atual" class="input-field text-center font-bold">
+                        </td>
+                        <td colspan="2" class="p-0 border-0"></td>
+                    </tr>
+                </table>
+
+                <!-- CANVAS DE ASSINATURA -->
+                <div class="border border-black border-t-0 grid grid-cols-2 divide-x divide-black relative min-h-[70px]">
+                    <div class="relative p-0.5">
+                        <span class="text-[9px] font-bold text-gray-500 absolute top-0.5 left-1.5 pointer-events-none">Assinatura do Técnico</span>
+                        <canvas id="canvas-tecnico" class="signature-canvas"></canvas>
+                        <button type="button" onclick="limparCanvas('tecnico')" class="no-print absolute bottom-0.5 right-0.5 touch-btn bg-gray-100 text-gray-700 text-[9px] px-1.5 py-0 border border-gray-300 hover:bg-gray-200 min-h-[20px]">Limpar</button>
+                    </div>
+                    <div class="relative p-0.5">
+                        <span class="text-[9px] font-bold text-gray-500 absolute top-0.5 left-1.5 pointer-events-none">Assinatura do Cliente</span>
+                        <canvas id="canvas-cliente" class="signature-canvas"></canvas>
+                        <button type="button" onclick="limparCanvas('cliente')" class="no-print absolute bottom-0.5 right-0.5 touch-btn bg-gray-100 text-gray-700 text-[9px] px-1.5 py-0 border border-gray-300 hover:bg-gray-200 min-h-[20px]">Limpar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPTS DE INTERAÇÃO E AUTOMAÇÃO (MANTIDOS 100% INTACTOS) -->
+    <!-- SCRIPTS -->
     <script>
         const estadosBrasil = [
             { uf: "PI", nome: "Piauí" }, { uf: "AC", nome: "Acre" }, { uf: "AL", nome: "Alagoas" },
@@ -488,7 +528,166 @@
             { uf: "SP", nome: "São Paulo" }, { uf: "SE", nome: "Sergipe" }, { uf: "TO", nome: "Tocantins" }
         ];
 
-        /* Gerador do Número da OS automático com prefixo AC- */
+        async function inicializarEstadosForm() {
+            const selectUf = document.getElementById('m-uf');
+            selectUf.innerHTML = '';
+            estadosBrasil.forEach(est => {
+                const opt = document.createElement('option');
+                opt.value = est.uf;
+                opt.innerText = est.uf;
+                selectUf.appendChild(opt);
+            });
+            selectUf.value = "PI";
+            await carregarCidadesForm("PI");
+        }
+
+        async function carregarCidadesForm(uf) {
+            const selectCidade = document.getElementById('m-cidade');
+            selectCidade.innerHTML = '<option value="">Carregando...</option>';
+            try {
+                const res = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios?orderBy=nome`);
+                const cidades = await res.json();
+                selectCidade.innerHTML = '';
+                cidades.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.nome;
+                    opt.innerText = c.nome;
+                    selectCidade.appendChild(opt);
+                });
+                selectCidade.value = "Acauã";
+                buscarCepPorCidadeForm("Acauã");
+            } catch (e) {
+                selectCidade.innerHTML = '<option value="Acauã">Acauã</option>';
+            }
+        }
+
+        async function buscarCepPorCidadeForm(nomeCidade) {
+            const uf = document.getElementById('m-uf').value;
+            const inputCep = document.getElementById('m-cep');
+            if (!nomeCidade || !uf) return;
+            try {
+                const res = await fetch(`https://viacep.com.br/ws/${uf}/${encodeURIComponent(nomeCidade)}/Central/json/`);
+                const dados = await res.json();
+                if (Array.isArray(dados) && dados.length > 0 && dados[0].cep) {
+                    inputCep.value = dados[0].cep;
+                }
+            } catch (error) {}
+        }
+
+        async function consultarViaCEPForm(valor) {
+            const cepLimpo = valor.replace(/\D/g, '');
+            if (cepLimpo.length === 8) {
+                try {
+                    const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+                    const data = await response.json();
+                    if (!data.erro) {
+                        if (data.logradouro) {
+                            document.getElementById('m-endereco').value = `${data.logradouro}${data.bairro ? ', ' + data.bairro : ''}`;
+                        }
+                        if (data.uf) {
+                            document.getElementById('m-uf').value = data.uf;
+                            await carregarCidadesForm(data.uf);
+                            if (data.localidade) {
+                                document.getElementById('m-cidade').value = data.localidade;
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }
+        }
+
+        function atualizarChamadoTecnico() {
+            const nomeTecnico = document.getElementById('m-atendido').value.trim();
+            let prefixo = "CH";
+            if (nomeTecnico.length > 0) {
+                prefixo = nomeTecnico.substring(0, 3).toUpperCase();
+            }
+            const numerosAleatorios = Math.floor(100 + Math.random() * 900);
+            document.getElementById('m-cham').value = `${prefixo}-${numerosAleatorios}`;
+        }
+
+        function adicionarItemMobile(qtd = 1, codigo = "", detalhamento = "", garantia = "SIM", valor = "0.00") {
+            const container = document.getElementById('lista-itens-mobile');
+            const card = document.createElement('div');
+            card.className = 'item-card-mobile';
+            card.innerHTML = `
+                <div class="grid grid-cols-3 gap-2 mb-2">
+                    <div class="field-group" style="margin-bottom:0">
+                        <label>Qtd:</label>
+                        <input type="number" min="1" value="${qtd}" class="m-item-qtd">
+                    </div>
+                    <div class="field-group" style="margin-bottom:0">
+                        <label>Código:</label>
+                        <input type="text" value="${codigo}" class="m-item-codigo" placeholder="Cód peça">
+                    </div>
+                    <div class="field-group" style="margin-bottom:0">
+                        <label>Garantia:</label>
+                        <select class="m-item-garantia">
+                            <option value="SIM" ${garantia === 'SIM' ? 'selected' : ''}>SIM</option>
+                            <option value="NÃO" ${garantia === 'NÃO' ? 'selected' : ''}>NÃO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field-group" style="margin-bottom:2px">
+                    <label>Detalhamento / Descrição:</label>
+                    <input type="text" value="${detalhamento}" class="m-item-desc" placeholder="Nome da peça ou material">
+                </div>
+                <div class="flex items-center justify-between mt-2">
+                    <div class="field-group" style="margin-bottom:0; width: 60%">
+                        <label>V. Unitário (R$):</label>
+                        <input type="number" step="0.01" value="${valor}" class="m-item-valor">
+                    </div>
+                    <button type="button" onclick="this.closest('.item-card-mobile').remove()" class="bg-red-100 text-red-700 font-bold px-2.5 py-1.5 rounded text-xs self-end">
+                        <i class="fa-solid fa-trash-can"></i> Excluir
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        function gerarOrdemDeServico() {
+            document.getElementById('os-cliente').value = document.getElementById('m-cliente').value;
+            document.getElementById('os-endereco').value = document.getElementById('m-endereco').value;
+            document.getElementById('os-uf').value = document.getElementById('m-uf').value;
+            document.getElementById('os-cidade').value = document.getElementById('m-cidade').value;
+            document.getElementById('os-contato').value = document.getElementById('m-contato').value;
+            document.getElementById('os-cep').value = document.getElementById('m-cep').value;
+            document.getElementById('os-cham').value = document.getElementById('m-cham').value;
+            document.getElementById('os-atendido').value = document.getElementById('m-atendido').value;
+            document.getElementById('os-servico').value = document.getElementById('m-servico').value;
+            document.getElementById('os-equipamento').value = document.getElementById('m-equipamento').value;
+
+            const tbody = document.getElementById('corpo-tabela-itens');
+            tbody.innerHTML = '';
+            const cards = document.querySelectorAll('.item-card-mobile');
+
+            if (cards.length === 0) {
+                adicionarLinha(); 
+            } else {
+                cards.forEach(card => {
+                    const q = card.querySelector('.m-item-qtd').value || "1";
+                    const cod = card.querySelector('.m-item-codigo').value || "";
+                    const desc = card.querySelector('.m-item-desc').value || "";
+                    const vu = card.querySelector('.m-item-valor').value || "0.00";
+                    adicionarLinha(q, cod, desc, vu, vu);
+                });
+            }
+
+            document.getElementById('etapa-formulario-inicial').classList.add('hidden');
+            document.getElementById('etapa-os-documento').classList.remove('hidden');
+
+            recalcularTotaisGerais();
+            setTimeout(() => {
+                setupCanvas('tecnico');
+                setupCanvas('cliente');
+            }, 100);
+        }
+
+        function voltarParaFormulario() {
+            document.getElementById('etapa-os-documento').classList.add('hidden');
+            document.getElementById('etapa-formulario-inicial').classList.remove('hidden');
+        }
+
         function gerarNumeroOSAutomatico() {
             const agora = new Date();
             const ano = agora.getFullYear();
@@ -496,13 +695,7 @@
             const dia = String(agora.getDate()).padStart(2, '0');
             const horas = String(agora.getHours()).padStart(2, '0');
             const minutos = String(agora.getMinutes()).padStart(2, '0');
-            
             document.getElementById('num_os').value = `AC-${ano}${mes}${dia}${horas}${minutos}`;
-        }
-
-        function gerarChamadoAutomatico() {
-            const numeroAleatorio = Math.floor(10000 + Math.random() * 90000);
-            document.getElementById('input-chamado').value = `CH-${numeroAleatorio}`;
         }
 
         function preencherHoraEDataAtual() {
@@ -512,91 +705,8 @@
             const ano = agora.getFullYear();
             const mes = String(agora.getMonth() + 1).padStart(2, '0');
             const dia = String(agora.getDate()).padStart(2, '0');
-
             document.getElementById('input-hora').value = `${horas}:${minutos}`;
-            document.getElementById('data-atual').value = `${ano}-${mes}-${dia}`;
-        }
-
-        function inicializarEstados() {
-            const selectUf = document.getElementById('select-uf');
-            selectUf.innerHTML = '<option value="">UF</option>';
-            estadosBrasil.forEach(estado => {
-                const opt = document.createElement('option');
-                opt.value = estado.uf;
-                opt.innerText = estado.uf;
-                selectUf.appendChild(opt);
-            });
-            selectUf.value = "PI";
-            carregarCidades("PI");
-        }
-
-        async function carregarCidades(uf) {
-            const selectCidade = document.getElementById('select-cidade');
-            if (!uf) {
-                selectCidade.innerHTML = '<option value="">Selecione UF</option>';
-                return;
-            }
-            selectCidade.innerHTML = '<option value="">Carregando...</option>';
-
-            try {
-                const res = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios?orderBy=nome`);
-                const cidades = await res.json();
-
-                selectCidade.innerHTML = '';
-                cidades.forEach(cidade => {
-                    const opt = document.createElement('option');
-                    opt.value = cidade.nome;
-                    opt.innerText = cidade.nome;
-                    selectCidade.appendChild(opt);
-                });
-
-                if (cidades.length > 0) {
-                    selectCidade.selectedIndex = 0;
-                }
-            } catch (error) {
-                selectCidade.innerHTML = '<option value="">Digite a Cidade</option>';
-            }
-        }
-
-        /* Consulta ViaCEP Automática ao digitar 8 números */
-        async function consultarViaCEP(valor) {
-            const cepLimpo = valor.replace(/\D/g, '');
-            if (cepLimpo.length === 8) {
-                try {
-                    const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
-                    const data = await response.json();
-                    if (!data.erro) {
-                        if (data.logradouro) {
-                            document.getElementById('inp-endereco').value = `${data.logradouro}${data.bairro ? ', ' + data.bairro : ''}`;
-                        }
-                        if (data.uf) {
-                            document.getElementById('select-uf').value = data.uf;
-                            await carregarCidades(data.uf);
-                            if (data.localidade) {
-                                document.getElementById('select-cidade').value = data.localidade;
-                            }
-                        }
-                    }
-                } catch (e) {
-                    console.log('Erro ao buscar ViaCEP:', e);
-                }
-            }
-        }
-
-        async function buscarCepCidade(nomeCidade) {
-            const uf = document.getElementById('select-uf').value;
-            const inputCep = document.getElementById('input-cep');
-
-            if (!nomeCidade || !uf || inputCep.value.trim() !== '') return;
-
-            try {
-                const res = await fetch(`https://viacep.com.br/ws/${uf}/${encodeURIComponent(nomeCidade)}/Central/json/`);
-                const dados = await res.json();
-
-                if (Array.isArray(dados) && dados.length > 0 && dados[0].cep) {
-                    inputCep.value = dados[0].cep;
-                }
-            } catch (error) {}
+            document.getElementById('data-atual').value = `${dia}/${mes}/${ano}`;
         }
 
         function formatarMoeda(val) {
@@ -610,22 +720,6 @@
             atual += delta;
             if (atual < 1) atual = 1;
             inputQtd.value = atual;
-            atualizarSubtotalLinha(tr, 'qtd');
-        }
-
-        function atualizarSubtotalLinha(tr, origem) {
-            const inputQtd = tr.querySelector('.qtd-item');
-            const inputVunit = tr.querySelector('.vunit-item');
-            const inputVtotal = tr.querySelector('.vtotal-item');
-
-            const qtd = parseFloat(inputQtd.value) || 0;
-            const vunit = parseFloat(inputVunit.value) || 0;
-
-            if (origem === 'qtd' || origem === 'vunit') {
-                const calcTotal = qtd * vunit;
-                inputVtotal.value = calcTotal.toFixed(2);
-            }
-
             recalcularTotaisGerais();
         }
 
@@ -641,7 +735,6 @@
 
             const valServico = parseFloat(document.getElementById('inp-servico').value) || 0;
             const valDesconto = parseFloat(document.getElementById('inp-desconto').value) || 0;
-            
             const totalGeral = Math.max(0, (totalPecas + valServico) - valDesconto);
 
             document.getElementById('lbl-total-pecas').innerText = formatarMoeda(totalPecas);
@@ -654,38 +747,38 @@
             tr.innerHTML = `
                 <td class="text-center">
                     <div class="flex items-center justify-center gap-0.5">
-                        <button type="button" onclick="alterarQtd(this, -1)" class="touch-btn no-print bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold w-5 h-5 min-w-0 min-h-0">-</button>
-                        <input type="number" value="${qtd}" min="1" oninput="atualizarSubtotalLinha(this.closest('tr'), 'qtd')" class="input-field text-center font-bold qtd-item w-6">
-                        <button type="button" onclick="alterarQtd(this, 1)" class="touch-btn no-print bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold w-5 h-5 min-w-0 min-h-0">+</button>
+                        <button type="button" onclick="alterarQtd(this, -1)" class="touch-btn no-print bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold w-4 h-4 min-w-0 min-h-0">-</button>
+                        <input type="number" value="${qtd}" min="1" oninput="recalcularTotaisGerais()" class="input-field text-center font-bold qtd-item w-5">
+                        <button type="button" onclick="alterarQtd(this, 1)" class="touch-btn no-print bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold w-4 h-4 min-w-0 min-h-0">+</button>
                     </div>
                 </td>
-                <td><input type="text" value="${codigo}" placeholder="" class="input-field"></td>
-                <td><input type="text" value="${detalhamento}" placeholder="" class="input-field"></td>
+                <td><input type="text" value="${codigo}" class="input-field"></td>
+                <td><input type="text" value="${detalhamento}" class="input-field"></td>
                 <td class="text-right">
                     <div class="flex items-center justify-end gap-0.5">
                         <span class="text-[9px] text-gray-500">R$</span>
-                        <input type="number" step="0.01" value="${vunit}" oninput="atualizarSubtotalLinha(this.closest('tr'), 'vunit')" class="input-field text-right font-bold vunit-item w-14" placeholder="0.00">
+                        <input type="number" step="0.01" value="${vunit}" class="input-field text-right font-bold vunit-item w-16">
                     </div>
                 </td>
                 <td class="text-right">
                     <div class="flex items-center justify-end gap-0.5">
                         <span class="text-[9px] text-gray-500">R$</span>
-                        <input type="number" step="0.01" value="${vtotal}" oninput="atualizarSubtotalLinha(this.closest('tr'), 'vtotal')" class="input-field text-right font-bold vtotal-item w-16 text-blue-ac" placeholder="0.00">
+                        <input type="number" step="0.01" value="${vtotal}" oninput="recalcularTotaisGerais()" class="input-field text-right font-bold vtotal-item w-16 text-blue-ac">
                     </div>
                 </td>
                 <td class="text-center no-print col-acoes">
                     <div class="flex items-center justify-center gap-0.5">
-                        <button type="button" onclick="adicionarLinha()" title="Adicionar outra linha" class="touch-btn bg-emerald-100 hover:bg-emerald-200 text-emerald-800 w-5 h-5 min-w-0 min-h-0">
+                        <button type="button" onclick="adicionarLinha()" class="touch-btn bg-emerald-100 hover:bg-emerald-200 text-emerald-800 w-5 h-5 min-w-0 min-h-0" title="Adicionar">
                             <i class="fa-solid fa-plus text-[9px]"></i>
                         </button>
-                        <button type="button" onclick="removerLinha(this)" title="Remover item" class="touch-btn bg-red-100 hover:bg-red-200 text-red-700 w-5 h-5 min-w-0 min-h-0">
+                        <button type="button" onclick="removerLinha(this)" class="touch-btn bg-red-100 hover:bg-red-200 text-red-700 w-5 h-5 min-w-0 min-h-0" title="Remover">
                             <i class="fa-solid fa-trash-can text-[9px]"></i>
                         </button>
                     </div>
                 </td>
             `;
             tbody.appendChild(tr);
-            atualizarSubtotalLinha(tr, 'vunit');
+            recalcularTotaisGerais();
         }
 
         function removerLinha(btn) {
@@ -701,25 +794,19 @@
         function setupCanvas(id) {
             const canvas = document.getElementById(`canvas-${id}`);
             if (!canvas) return;
-
             const ctx = canvas.getContext('2d');
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight || 65;
-
             ctx.lineWidth = 1.8;
             ctx.lineCap = 'round';
             ctx.strokeStyle = '#000000';
-
             canvasCtxMap[id] = { canvas, ctx, desenhando: false };
 
             function getPos(e) {
                 const rect = canvas.getBoundingClientRect();
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                return {
-                    x: clientX - rect.left,
-                    y: clientY - rect.top
-                };
+                return { x: clientX - rect.left, y: clientY - rect.top };
             }
 
             function iniciar(e) {
@@ -745,7 +832,6 @@
             canvas.addEventListener('mousemove', desenhar);
             canvas.addEventListener('mouseup', parar);
             canvas.addEventListener('mouseleave', parar);
-
             canvas.addEventListener('touchstart', iniciar, { passive: false });
             canvas.addEventListener('touchmove', desenhar, { passive: false });
             canvas.addEventListener('touchend', parar);
@@ -766,22 +852,20 @@
         function obterOpcoesPDF() {
             const numOs = document.getElementById('num_os').value || 'AC-OS';
             return {
-                margin:       [0, 0, 0, 0],
-                filename:     `OS_${numOs.trim()}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: 'avoid-all' }
+                margin: [0, 0, 0, 0],
+                filename: `OS_${numOs.trim()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: 'avoid-all' }
             };
         }
 
-        /* GERAÇÃO DE PDF AJUSTADO PARA PÁGINA ÚNICA A4 */
         function gerarPDF() {
             const elemento = document.getElementById('os-documento');
             html2pdf().set(obterOpcoesPDF()).from(elemento).save();
         }
 
-        /* FUNÇÃO INTEGRADA AO BOTÃO IMPRIMIR: COMPARTILHAR NO CELULAR OU IMPRIMIR NO PC */
         async function executarImpressaoOuCompartilhamento() {
             const elemento = document.getElementById('os-documento');
             const numOs = document.getElementById('num_os').value || 'AC-OS';
@@ -791,7 +875,6 @@
                     const pdfWorker = html2pdf().set(obterOpcoesPDF()).from(elemento);
                     const pdfBlob = await pdfWorker.output('blob');
                     const file = new File([pdfBlob], `OS_${numOs.trim()}.pdf`, { type: 'application/pdf' });
-
                     if (navigator.canShare({ files: [file] })) {
                         await navigator.share({
                             files: [file],
@@ -800,23 +883,17 @@
                         });
                         return;
                     }
-                } catch (err) {
-                    console.log('Compartilhamento cancelado ou não suportado, usando fallback de impressão:', err);
-                }
+                } catch (err) {}
             }
-
             window.print();
         }
 
         window.onload = function() {
             gerarNumeroOSAutomatico();
+            atualizarChamadoTecnico();
             preencherHoraEDataAtual();
-            inicializarEstados();
-            setupCanvas('tecnico');
-            setupCanvas('cliente');
-
-            // Inicia com 1 linha vazia
-            adicionarLinha();
+            inicializarEstadosForm();
+            adicionarItemMobile();
         };
 
         window.onresize = function() {
