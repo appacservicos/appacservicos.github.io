@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>AC Serviços - Painel</title>
+  
+  <!-- Configurações para o atalho na tela inicial abrir com cara de app (Tela Cheia) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AC Serviços">
+  <link rel="apple-touch-icon" href="AClogomarca.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#2b3990">
+
   <style>
     * {
       margin: 0;
@@ -146,93 +155,3 @@
     }
 
     .nav-item.active {
-      color: #2b3990;
-      font-weight: bold;
-    }
-
-    .nav-item svg {
-      width: 20px;
-      height: 20px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="app-wrapper">
-    <!-- Cabeçalho -->
-    <header class="header-banner">
-      <img src="AClogomarca.png" alt="AC Serviços" class="brand-logo-full">
-    </header>
-
-    <!-- Conteúdo Principal -->
-    <main class="container">
-      <div class="welcome-text">
-        <h2>Olá, Técnico!</h2>
-        <p>Acompanhe suas ordens de serviços e mantenha seu trabalho sempre organizado.</p>
-      </div>
-
-      <!-- Grid de Botões -->
-      <div class="actions-grid">
-        <!-- BOTÃO AZUL COM LINK DIRETO PARA A TELA NOVA OS -->
-        <a href="O-S.html" class="action-btn primary">
-          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          Ordens de Serviços
-        </a>
-
-        <a href="ordens.html" class="action-btn">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-          Ordens de Serviços
-        </a>
-
-        <a href="clientes.html" class="action-btn">
-          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          Clientes
-        </a>
-
-        <a href="orcamento.html" class="action-btn">
-          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="6" y1="8" x2="18" y2="8"></line><line x1="6" y1="12" x2="18" y2="12"></line><line x1="6" y1="16" x2="12" y2="16"></line></svg>
-          Orçamentos
-        </a>
-
-        <a href="#" class="action-btn">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-          Relatórios
-        </a>
-
-        <a href="#" class="action-btn">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          Configurações
-        </a>
-      </div>
-    </main>
-
-    <!-- Rodapé -->
-    <nav class="bottom-nav">
-      <a href="index.html" class="nav-item active">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-        Início
-      </a>
-      <a href="ordens-servico.html" class="nav-item">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
-        OS
-      </a>
-      <a href="#" class="nav-item">
-        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-        Clientes
-      </a>
-      <a href="#" class="nav-item">
-        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="6" y1="8" x2="18" y2="8"></line></svg>
-        Orçamento
-      </a>
-      <a href="#" class="nav-item">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-        Mais
-      </a>
-    </nav>
-  </div>
-
-</body>
-</html>
