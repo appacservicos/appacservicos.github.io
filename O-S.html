@@ -4,413 +4,829 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AC SERVIÇOS - Ordem de Serviço</title>
-    
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Signature Pad JS -->
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-    
-    <!-- html2pdf.js CDN -->
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js para exportação direta em PDF A4 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        /* Regras de impressão A4 em página única */
-        @media print {
-            @page {
-                size: A4 portrait;
-                margin: 0;
-            }
-            body {
-                background: white !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .print-a4-container {
-                width: 210mm !important;
-                max-width: 210mm !important;
-                padding: 8mm !important;
-                margin: 0 auto !important;
-                box-shadow: none !important;
-                border: none !important;
-            }
+        @import url('https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap');
+
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            box-sizing: border-box;
         }
 
-        /* Otimizações móbiles e de formulário */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
+        body {
+            background-color: #0f172a;
+            color: #000000;
+            margin: 0;
+            padding: 10px 5px;
+        }
+
+        /* Cor oficial Azul da AC SERVIÇOS (#003882) */
+        .bg-blue-ac {
+            background-color: #003882 !important;
+        }
+
+        .text-blue-ac {
+            color: #003882 !important;
+        }
+
+        /* Container Folha A4 Otimizado para Desktop / Impressão */
+        .page-a4 {
+            width: 210mm;
+            max-height: 295mm;
+            padding: 5mm 6mm;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #000000;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Estrutura compacta das tabelas */
+        .os-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: -1px;
+            table-layout: fixed;
+        }
+
+        .os-table td, .os-table th {
+            border: 1px solid #000000;
+            padding: 3px 4px;
+            font-size: 10px;
+            color: #000000;
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+
+        /* Cabeçalho azul com texto branco em negrito */
+        .header-blue-text-white {
+            background-color: #003882 !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            text-align: center;
+        }
+
+        .header-blue-text-white th {
+            color: #ffffff !important;
+            font-weight: bold !important;
+            padding: 4px 2px;
+        }
+
+        /* Inputs e Selects */
+        .input-field, .select-field {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 10px;
+            color: #000000;
+            padding: 1px 0;
+            margin: 0;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .input-field:focus, .select-field:focus {
+            background-color: #e0f2fe;
+            border-radius: 2px;
+        }
+
+        /* Ocultar spinners dos inputs numéricos */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
         input[type=number] {
             -moz-appearance: textfield;
         }
 
-        .bg-ac-blue { background-color: #003882; }
-        .text-ac-blue { color: #003882; }
-        .border-ac-blue { border-color: #003882; }
+        /* Botões Táteis */
+        .touch-btn {
+            min-width: 30px;
+            min-height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            touch-action: manipulation;
+            font-weight: bold;
+            transition: all 0.15s ease;
+        }
+
+        /* Canvas de Assinatura */
+        canvas.signature-canvas {
+            width: 100%;
+            height: 65px;
+            cursor: crosshair;
+            touch-action: none;
+            background-color: #ffffff;
+        }
+
+        /* ADAPTAÇÃO EXCLUSIVA PARA TELA DE CELULAR (Preenchimento sem deformar) */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 4px;
+            }
+
+            .page-a4 {
+                width: 100% !important;
+                max-height: none !important;
+                padding: 6px !important;
+                box-shadow: none !important;
+            }
+
+            /* Permite rolagem lateral suave se necessário para tabelas sem esmagar o texto */
+            .table-responsive-mobile {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .os-table td, .os-table th {
+                padding: 4px 3px !important;
+                font-size: 11px !important; /* Texto legível no celular */
+            }
+
+            .input-field, .select-field {
+                font-size: 11px !important;
+                min-height: 22px;
+            }
+        }
+
+        /* REGRAS RÍGIDAS DE IMPRESSÃO E GERAÇÃO DE PDF A4 (Mantém a aparência idêntica ao anexo) */
+        @page {
+            size: A4 portrait;
+            margin: 0mm;
+        }
+
+        @media print {
+            body {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .page-a4 {
+                box-shadow: none !important;
+                border: 1px solid #000000 !important;
+                width: 210mm !important;
+                max-width: 210mm !important;
+                height: 295mm !important;
+                max-height: 295mm !important;
+                margin: 0 auto !important;
+                padding: 5mm 6mm !important;
+            }
+
+            .os-table td, .os-table th {
+                padding: 3px 4px !important;
+                font-size: 10px !important;
+            }
+
+            .input-field, .select-field {
+                font-size: 10px !important;
+            }
+
+            .touch-btn, .col-acoes {
+                display: none !important;
+            }
+        }
     </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen text-gray-800 p-2 sm:p-4">
+<body>
 
-    <!-- BARRA DE BOTÕES SUPORTE MÓVEL -->
-    <div class="max-w-[800px] mx-auto mb-3 flex flex-wrap gap-2 justify-between items-center no-print bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-        <div class="flex flex-wrap gap-2 w-full sm:w-auto justify-between sm:justify-start">
-            <button onclick="gerarNumeroOS()" class="bg-gray-600 hover:bg-gray-700 text-white font-medium text-xs sm:text-sm px-3 py-2 rounded flex items-center gap-1 transition">
-                🔄 Nova OS
-            </button>
-            <button onclick="limparFormulario()" class="bg-red-600 hover:bg-red-700 text-white font-medium text-xs sm:text-sm px-3 py-2 rounded flex items-center gap-1 transition">
-                🧹 Limpar
-            </button>
-        </div>
-        <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
-            <button onclick="baixarPDF()" class="w-1/2 sm:w-auto bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs sm:text-sm px-3 py-2 rounded flex items-center justify-center gap-1 shadow transition">
-                📄 Baixar PDF
-            </button>
-            <button onclick="compartilharOuImprimir()" class="w-1/2 sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded flex items-center justify-center gap-1 shadow transition">
-                🖨️ Imprimir
-            </button>
+    <!-- PAINEL SUPERIOR DE CONTROLES -->
+    <div class="max-w-[210mm] mx-auto mb-3 bg-white p-2.5 border border-black rounded-lg shadow-lg no-print">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="bg-blue-ac text-white font-bold px-2.5 py-1 rounded text-xs shadow">
+                    <i class="fa-solid fa-file-invoice mr-1"></i> AC SERVIÇOS
+                </span>
+                <span class="text-xs font-bold text-gray-700">Ordem de Serviço (A4 Página Única)</span>
+            </div>
+
+            <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+                <button onclick="adicionarLinha()" type="button" class="touch-btn bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 text-xs shadow">
+                    <i class="fa-solid fa-plus mr-1"></i> Item
+                </button>
+                <button onclick="gerarPDF()" type="button" class="touch-btn bg-blue-ac hover:bg-blue-900 text-white px-2.5 text-xs shadow">
+                    <i class="fa-solid fa-file-pdf mr-1"></i> Baixar PDF
+                </button>
+                <button onclick="executarImpressaoOuCompartilhamento()" type="button" class="touch-btn bg-emerald-700 hover:bg-emerald-800 text-white px-2.5 text-xs shadow">
+                    🖨️ Imprimir
+                </button>
+                <button onclick="limparAssinaturas()" type="button" class="touch-btn bg-amber-600 hover:bg-amber-700 text-white px-2.5 text-xs shadow">
+                    <i class="fa-solid fa-eraser mr-1"></i> Limpar Assinaturas
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- DOCUMENTO ORDEM DE SERVIÇO -->
-    <div id="os-document" class="print-a4-container max-w-[800px] mx-auto bg-white p-3 sm:p-5 rounded-lg shadow-md border border-gray-200 text-xs sm:text-sm">
-        
-        <!-- CABEÇALHO -->
-        <div class="bg-ac-blue text-white rounded-t-lg p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-center gap-2 mb-3">
-            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
-                <img src="AClogomarca.png" alt="AC SERVIÇOS" class="h-10 sm:h-12 object-contain bg-white p-1 rounded" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
-                <div id="logo-fallback" class="hidden font-bold text-lg sm:text-xl tracking-wider text-yellow-400">AC SERVIÇOS</div>
-            </div>
-            <div class="text-right w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-blue-800">
-                <h1 class="text-sm sm:text-lg font-bold tracking-tight">ORDEM DE SERVIÇO</h1>
-                <div class="flex items-center justify-end gap-1 mt-1">
-                    <span class="font-bold text-yellow-300">Nº OS:</span>
-                    <input type="text" id="os-numero" class="bg-blue-900 text-yellow-300 font-bold px-2 py-0.5 rounded text-right w-32 text-xs focus:outline-none" readonly>
-                </div>
-            </div>
-        </div>
+    <!-- FOLHA DA ORDEM DE SERVIÇO (A4 - RIGOROSAMENTE PÁGINA ÚNICA) -->
+    <div id="os-documento" class="page-a4">
+        <div>
+            <!-- 1. CABEÇALHO DA EMPRESA COM NÚMERO AUTOMÁTICO AC- -->
+            <table class="os-table">
+                <tr>
+                    <td class="bg-blue-ac text-white w-1/2 p-2 border-black">
+                        <div class="flex items-center gap-2.5">
+                            <img src="AClogomarca.png" alt="AC SERVIÇOS Logo" class="h-10 w-auto object-contain shrink-0" onerror="this.onerror=null; this.outerHTML='<div class=\'w-10 h-10 border-2 border-white rounded-full flex items-center justify-center font-bold text-lg leading-none text-white shrink-0\'>AC</div>';">
+                            <div>
+                                <div class="font-bold text-base leading-tight tracking-wider text-white">AC SERVIÇOS</div>
+                                <div class="text-[8.5px] text-gray-200">CONSERTO DE EQUIPAMENTOS ODONTOLÓGICOS</div>
+                                <div class="text-[11px] font-bold mt-0.5 text-white">(99) 98456-4555</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="w-1/2 p-2 text-left border-black bg-white">
+                        <div class="flex items-center justify-start gap-1 font-bold text-xs">
+                            <span class="text-black shrink-0">ORDEM DE SERVIÇO:</span>
+                            <div class="flex items-center w-full">
+                                <input type="text" id="num_os" value="" placeholder="AC-000000" class="input-field font-bold text-xs text-blue-ac border-b border-gray-400 focus:border-black">
+                                <button type="button" onclick="gerarNumeroOSAutomatico()" title="Gerar novo número de OS" class="no-print text-gray-500 hover:text-black ml-1 text-[10px] p-0.5 shrink-0">
+                                    <i class="fa-solid fa-arrows-rotate"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-        <!-- DATAS E DETALHES -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3 bg-gray-50 p-2.5 rounded border border-gray-200">
-            <div>
-                <label class="block text-[10px] font-bold text-gray-600 uppercase">Data Entrada</label>
-                <input type="date" id="os-data" class="w-full bg-white border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:border-blue-800">
-            </div>
-            <div>
-                <label class="block text-[10px] font-bold text-gray-600 uppercase">Hora Entrada</label>
-                <input type="time" id="os-hora" class="w-full bg-white border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:border-blue-800">
-            </div>
-            <div>
-                <label class="block text-[10px] font-bold text-gray-600 uppercase">Garantia</label>
-                <select id="os-garantia" class="w-full bg-white border border-gray-300 rounded px-2 py-1 text-xs font-semibold focus:outline-none focus:border-blue-800">
-                    <option value="NÃO">NÃO</option>
-                    <option value="SIM">SIM</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-[10px] font-bold text-gray-600 uppercase">Técnico Resp.</label>
-                <input type="text" id="os-tecnico" placeholder="Nome do técnico" class="w-full bg-white border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:border-blue-800">
-            </div>
-        </div>
+            <!-- 2. DADOS DO CLIENTE E LOCALIZAÇÃO COM VIACEP -->
+            <table class="os-table">
+                <tr>
+                    <td colspan="5">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">Cliente:</span>
+                            <input type="text" id="inp-cliente" value="" placeholder="" class="input-field font-bold">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">Endereço:</span>
+                            <input type="text" id="inp-endereco" value="" placeholder="" class="input-field">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="w-[18%]">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">UF:</span>
+                            <select id="select-uf" onchange="carregarCidades(this.value)" class="select-field font-bold cursor-pointer">
+                            </select>
+                        </div>
+                    </td>
+                    <td class="w-[38%]">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">Cidade:</span>
+                            <select id="select-cidade" onchange="buscarCepCidade(this.value)" class="select-field cursor-pointer">
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td colspan="3" class="w-[44%]">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">Contato:</span>
+                            <input type="text" id="inp-contato" value="" placeholder="" class="input-field">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="w-[24%]">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">CEP:</span>
+                            <input type="text" id="input-cep" value="" maxlength="9" placeholder="00000-000" oninput="consultarViaCEP(this.value)" class="input-field font-bold">
+                        </div>
+                    </td>
+                    <td class="w-[18%]">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">Gar:</span>
+                            <select id="select-garantia" class="select-field font-bold cursor-pointer">
+                                <option value="SIM">SIM</option>
+                                <option value="NÃO">NÃO</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td class="w-[24%]">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center w-full">
+                                <span class="font-bold mr-1 shrink-0">Cham:</span>
+                                <input type="text" id="input-chamado" value="" placeholder="" class="input-field font-bold">
+                            </div>
+                            <button type="button" onclick="gerarChamadoAutomatico()" title="Gerar novo chamado" class="no-print text-gray-500 hover:text-black ml-1 text-[10px] p-0.5">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="w-[18%]">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">Hora:</span>
+                            <input type="text" id="input-hora" value="" placeholder="00:00" class="input-field font-bold">
+                        </div>
+                    </td>
+                    <td class="w-[16%]">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">Inst:</span>
+                            <input type="text" id="inp-inst" value="" placeholder="" class="input-field">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <div class="flex items-center">
+                            <span class="font-bold mr-1 shrink-0">Atendido por:</span>
+                            <input type="text" id="inp-atendido-por" value="" placeholder="" class="input-field">
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-        <!-- DADOS DO CLIENTE -->
-        <div class="mb-3 border border-gray-200 rounded overflow-hidden">
-            <div class="bg-gray-200 px-3 py-1 font-bold text-ac-blue text-xs uppercase tracking-wide">
-                Dados do Cliente
-            </div>
-            <div class="p-2.5 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <div class="sm:col-span-2">
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase">Cliente / Razão Social</label>
-                    <input type="text" id="cli-nome" placeholder="Nome completo" class="w-full border-b border-gray-300 focus:border-blue-800 py-0.5 text-xs focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase">CPF / CNPJ</label>
-                    <input type="text" id="cli-documento" placeholder="000.000.000-00" class="w-full border-b border-gray-300 focus:border-blue-800 py-0.5 text-xs focus:outline-none">
-                </div>
-                <div class="sm:col-span-2">
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase">Endereço</label>
-                    <input type="text" id="cli-endereco" placeholder="Rua, Nº, Bairro, Cidade" class="w-full border-b border-gray-300 focus:border-blue-800 py-0.5 text-xs focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase">Telefone / WhatsApp</label>
-                    <input type="text" id="cli-telefone" placeholder="(00) 00000-0000" class="w-full border-b border-gray-300 focus:border-blue-800 py-0.5 text-xs focus:outline-none">
-                </div>
-            </div>
-        </div>
+            <!-- 3. DETALHES DE SERVIÇO E EQUIPAMENTO -->
+            <div class="table-responsive-mobile">
+                <table class="os-table">
+                    <tr>
+                        <th colspan="6" class="text-center font-bold text-[10px] py-1 text-black bg-gray-50 border-black">
+                            Serviços Executados [ Serviço:
+                            <input type="text" value="" placeholder="" class="input-field font-bold w-32 text-center border-b border-gray-400 inline-block focus:border-black text-blue-ac">
+                            ] [ Equipamento:
+                            <input type="text" value="" placeholder="" class="input-field font-bold w-40 text-center border-b border-gray-400 inline-block focus:border-black text-blue-ac">
+                            ]
+                        </th>
+                    </tr>
 
-        <!-- EQUIPAMENTO -->
-        <div class="mb-3 border border-gray-200 rounded overflow-hidden">
-            <div class="bg-gray-200 px-3 py-1 font-bold text-ac-blue text-xs uppercase tracking-wide">
-                Equipamento / Aparelho
-            </div>
-            <div class="p-2.5 grid grid-cols-1 sm:grid-cols-4 gap-2">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase">Equipamento</label>
-                    <input type="text" id="eq-nome" placeholder="Ex: Ar Condicionado" class="w-full border-b border-gray-300 focus:border-blue-800 py-0.5 text-xs focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase">Marca / Modelo</label>
-                    <input type="text" id="eq-marca" placeholder="Ex: Springer / 12000 BTU" class="w-full border-b border-gray-300 focus:border-blue-800 py-0.5 text-xs focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase">Nº de Série</label>
-                    <input type="text" id="eq-serie" placeholder="Nº de série" class="w-full border-b border-gray-300 focus:border-blue-800 py-0.5 text-xs focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase">Voltagem</label>
-                    <input type="text" id="eq-voltagem" placeholder="110V / 220V" class="w-full border-b border-gray-300 focus:border-blue-800 py-0.5 text-xs focus:outline-none">
-                </div>
-            </div>
-        </div>
+                    <!-- CABEÇALHO AZUL (#003882) COM TEXTO BRANCO PURO NEGRITO -->
+                    <tr class="header-blue-text-white text-[10px]">
+                        <th class="w-16 text-center border-black">QTD</th>
+                        <th class="w-20 text-left border-black">CÓDIGO</th>
+                        <th class="text-left border-black">DETALHAMENTO</th>
+                        <th class="w-20 text-right border-black">V.UNIT.</th>
+                        <th class="w-24 text-right border-black">VALOR TOTAL</th>
+                        <th class="w-10 text-center border-black no-print col-acoes">#</th>
+                    </tr>
 
-        <!-- OBSERVAÇÕES -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
-            <div class="border border-gray-200 rounded p-2">
-                <label class="block text-[10px] font-bold text-ac-blue uppercase mb-1">Defeito Relatado / Problema</label>
-                <textarea id="obs-defeito" rows="2" class="w-full border border-gray-200 rounded p-1 text-xs focus:outline-none focus:border-blue-800 resize-none" placeholder="Descrição do problema..."></textarea>
-            </div>
-            <div class="border border-gray-200 rounded p-2">
-                <label class="block text-[10px] font-bold text-ac-blue uppercase mb-1">Serviço Realizado / Solução</label>
-                <textarea id="obs-servico" rows="2" class="w-full border border-gray-200 rounded p-1 text-xs focus:outline-none focus:border-blue-800 resize-none" placeholder="Descrição dos serviços prestados..."></textarea>
-            </div>
-        </div>
-
-        <!-- TABELA DE PEÇAS -->
-        <div class="mb-3 border border-gray-200 rounded overflow-hidden">
-            <div class="bg-gray-200 px-3 py-1 font-bold text-ac-blue text-xs uppercase tracking-wide flex justify-between items-center">
-                <span>Peças e Materiais</span>
-                <button onclick="adicionarLinhaPeca()" class="no-print bg-ac-blue text-white text-[10px] px-2 py-1 rounded hover:bg-blue-900 transition font-medium">
-                    + Adicionar Item
-                </button>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs border-collapse" id="tabela-pecas">
-                    <thead>
-                        <tr class="bg-gray-100 border-b border-gray-200 text-gray-600 font-bold">
-                            <th class="p-1.5 w-12 text-center">QTD</th>
-                            <th class="p-1.5">DESCRIÇÃO DA PEÇA / MATERIAL</th>
-                            <th class="p-1.5 w-20 sm:w-24 text-right">V. UNIT</th>
-                            <th class="p-1.5 w-20 sm:w-24 text-right">TOTAL</th>
-                            <th class="p-1.5 w-8 text-center no-print"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpo-tabela-pecas">
-                        <!-- Gerado dinamicamente -->
+                    <tbody id="corpo-tabela-itens">
+                        <!-- Linha inicial adicionada via JS -->
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <!-- VALORES -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3 bg-gray-50 p-2.5 rounded border border-gray-200 items-center">
-            <div>
-                <label class="block text-[10px] font-bold text-gray-600 uppercase">Mão de Obra / Serviço (R$)</label>
-                <input type="number" id="valor-mao-obra" step="0.01" min="0" placeholder="0,00" oninput="calcularTotais()" class="w-full bg-white border border-gray-300 rounded px-2 py-1 text-xs font-semibold text-right focus:outline-none focus:border-blue-800">
-            </div>
-            <div>
-                <label class="block text-[10px] font-bold text-gray-600 uppercase">Total Peças (R$)</label>
-                <input type="text" id="valor-total-pecas" value="0,00" readonly class="w-full bg-gray-100 border border-gray-300 rounded px-2 py-1 text-xs font-semibold text-right text-gray-700 cursor-not-allowed">
-            </div>
-            <div class="bg-ac-blue p-2 rounded text-white flex justify-between items-center">
-                <span class="font-bold text-xs uppercase">TOTAL GERAL:</span>
-                <span id="valor-total-geral" class="text-base sm:text-lg font-extrabold text-yellow-300">R$ 0,00</span>
-            </div>
-        </div>
+            <!-- 4. OBSERVAÇÕES E RESUMO FINANCEIRO (COM DESCONTO) -->
+            <table class="os-table">
+                <tr>
+                    <td class="w-[65%] align-top p-1.5 border-black">
+                        <span class="font-bold block mb-0.5 text-[10px]">Observações:</span>
+                        <textarea id="obs_texto" rows="4" placeholder="" class="input-field w-full resize-none text-[10px]"></textarea>
+                    </td>
+                    <td class="w-[35%] p-0 align-top border-black">
+                        <table class="w-full h-full border-collapse">
+                            <tr>
+                                <td class="font-bold border-b border-black py-1 px-1.5 text-left bg-gray-50 text-[10px]">TOTAL PÇ</td>
+                                <td id="lbl-total-pecas" class="border-b border-black py-1 px-1.5 text-right font-bold text-xs">R$ 0,00</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold border-b border-black py-1 px-1.5 text-left bg-gray-50 text-[10px]">SERVIÇO</td>
+                                <td class="border-b border-black py-1 px-1.5 text-right">
+                                    <div class="flex justify-end items-center gap-0.5">
+                                        <span class="text-[10px] font-bold">R$</span>
+                                        <input type="number" id="inp-servico" step="0.01" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs" placeholder="0.00">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold border-b border-black py-1 px-1.5 text-left bg-gray-50 text-[10px]">DESCONTO</td>
+                                <td class="border-b border-black py-1 px-1.5 text-right">
+                                    <div class="flex justify-end items-center gap-0.5">
+                                        <span class="text-[10px] font-bold text-red-600">- R$</span>
+                                        <input type="number" id="inp-desconto" step="0.01" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs text-red-600" placeholder="0.00">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold py-1 px-1.5 text-left bg-gray-100 text-[10px]">TOTAL GERAL</td>
+                                <td id="lbl-total-geral" class="font-bold py-1 px-1.5 text-right text-xs text-blue-ac">R$ 0,00</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
 
-        <!-- ASSINATURAS -->
-        <div class="border border-gray-200 rounded p-2.5 bg-gray-50">
-            <p class="text-[9px] text-gray-500 mb-2 text-justify leading-tight">
-                Declaro ter conferido os serviços prestados e o funcionamento do equipamento em conformidade com esta Ordem de Serviço.
-            </p>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-                <div class="text-center">
-                    <div class="border border-gray-300 rounded bg-white relative h-20 mb-1">
-                        <canvas id="signature-tecnico" class="w-full h-full rounded cursor-crosshair"></canvas>
-                        <button onclick="limparAssinatura('tecnico')" class="no-print absolute top-1 right-1 text-[9px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-1 rounded">Limpar</button>
-                    </div>
-                    <span class="block text-[10px] font-bold text-gray-600 uppercase">Assinatura do Técnico</span>
+            <!-- 5. TERMOS DE GARANTIA -->
+            <table class="os-table">
+                <tr>
+                    <td class="py-1 px-1.5 text-center text-[9.5px]">
+                        O equipamento foi consertado e revisado, estando em perfeitas condições de funcionamento.
+                    </td>
+                </tr>
+            </table>
+
+            <!-- QUADRO DE RÓTULOS DE ASSINATURA -->
+            <table class="os-table">
+                <tr class="font-bold text-center text-[10px] bg-gray-50">
+                    <td class="w-1/4 py-0.5">VISTO</td>
+                    <td class="w-1/4 py-0.5">DATA</td>
+                    <td class="w-1/4 py-0.5">TÉCNICO / RESPONSÁVEL</td>
+                    <td class="w-1/4 py-0.5">CLIENTE</td>
+                </tr>
+                <tr>
+                    <td class="text-center align-middle p-0.5">
+                        <input type="text" placeholder="" class="input-field text-center">
+                    </td>
+                    <td class="text-center align-middle p-0.5">
+                        <input type="text" id="data-atual" class="input-field text-center font-bold">
+                    </td>
+                    <td colspan="2" class="p-0 border-0"></td>
+                </tr>
+            </table>
+
+            <!-- CANVAS COMPACTO PARA ASSINATURAS DIGITAIS -->
+            <div class="border border-black border-t-0 grid grid-cols-2 divide-x divide-black relative min-h-[70px]">
+                <div class="relative p-0.5">
+                    <span class="text-[9px] font-bold text-gray-500 absolute top-0.5 left-1.5 pointer-events-none">Assinatura do Técnico</span>
+                    <canvas id="canvas-tecnico" class="signature-canvas"></canvas>
+                    <button type="button" onclick="limparCanvas('tecnico')" class="no-print absolute bottom-0.5 right-0.5 touch-btn bg-gray-100 text-gray-700 text-[9px] px-1.5 py-0 border border-gray-300 hover:bg-gray-200 min-h-[20px]">
+                        Limpar
+                    </button>
                 </div>
-                <div class="text-center">
-                    <div class="border border-gray-300 rounded bg-white relative h-20 mb-1">
-                        <canvas id="signature-cliente" class="w-full h-full rounded cursor-crosshair"></canvas>
-                        <button onclick="limparAssinatura('cliente')" class="no-print absolute top-1 right-1 text-[9px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-1 rounded">Limpar</button>
-                    </div>
-                    <span class="block text-[10px] font-bold text-gray-600 uppercase">Assinatura do Cliente</span>
+
+                <div class="relative p-0.5">
+                    <span class="text-[9px] font-bold text-gray-500 absolute top-0.5 left-1.5 pointer-events-none">Assinatura do Cliente</span>
+                    <canvas id="canvas-cliente" class="signature-canvas"></canvas>
+                    <button type="button" onclick="limparCanvas('cliente')" class="no-print absolute bottom-0.5 right-0.5 touch-btn bg-gray-100 text-gray-700 text-[9px] px-1.5 py-0 border border-gray-300 hover:bg-gray-200 min-h-[20px]">
+                        Limpar
+                    </button>
                 </div>
             </div>
         </div>
-
-        <!-- RODAPÉ -->
-        <div class="text-center mt-3 pt-2 border-t border-gray-200 text-[10px] text-gray-500">
-            AC SERVIÇOS - Qualidade e Excelência em Atendimento
-        </div>
-
     </div>
 
+    <!-- SCRIPTS DE INTERAÇÃO E AUTOMAÇÃO (MANTIDOS 100% INTACTOS) -->
     <script>
-        let sigPadTecnico, sigPadCliente;
+        const estadosBrasil = [
+            { uf: "PI", nome: "Piauí" }, { uf: "AC", nome: "Acre" }, { uf: "AL", nome: "Alagoas" },
+            { uf: "AP", nome: "Amapá" }, { uf: "AM", nome: "Amazonas" }, { uf: "BA", nome: "Bahia" },
+            { uf: "CE", nome: "Ceará" }, { uf: "DF", nome: "Distrito Federal" }, { uf: "ES", nome: "Espírito Santo" },
+            { uf: "GO", nome: "Goiás" }, { uf: "MA", nome: "Maranhão" }, { uf: "MT", nome: "Mato Grosso" },
+            { uf: "MS", nome: "Mato Grosso do Sul" }, { uf: "MG", nome: "Minas Gerais" }, { uf: "PA", nome: "Pará" },
+            { uf: "PB", nome: "Paraíba" }, { uf: "PR", nome: "Paraná" }, { uf: "PE", nome: "Pernambuco" },
+            { uf: "RJ", nome: "Rio de Janeiro" }, { uf: "RN", nome: "Rio Grande do Norte" }, { uf: "RS", nome: "Rio Grande do Sul" },
+            { uf: "RO", nome: "Rondônia" }, { uf: "RR", nome: "Roraima" }, { uf: "SC", nome: "Santa Catarina" },
+            { uf: "SP", nome: "São Paulo" }, { uf: "SE", nome: "Sergipe" }, { uf: "TO", nome: "Tocantins" }
+        ];
 
-        window.addEventListener('DOMContentLoaded', () => {
-            inicializarDataEHora();
-            gerarNumeroOS();
-            inicializarAssinaturas();
-            adicionarLinhaPeca();
-        });
-
-        function inicializarDataEHora() {
+        /* Gerador do Número da OS automático com prefixo AC- */
+        function gerarNumeroOSAutomatico() {
             const agora = new Date();
             const ano = agora.getFullYear();
             const mes = String(agora.getMonth() + 1).padStart(2, '0');
             const dia = String(agora.getDate()).padStart(2, '0');
             const horas = String(agora.getHours()).padStart(2, '0');
             const minutos = String(agora.getMinutes()).padStart(2, '0');
-
-            document.getElementById('os-data').value = `${ano}-${mes}-${dia}`;
-            document.getElementById('os-hora').value = `${horas}:${minutos}`;
+            
+            document.getElementById('num_os').value = `AC-${ano}${mes}${dia}${horas}${minutos}`;
         }
 
-        function gerarNumeroOS() {
+        function gerarChamadoAutomatico() {
+            const numeroAleatorio = Math.floor(10000 + Math.random() * 90000);
+            document.getElementById('input-chamado').value = `CH-${numeroAleatorio}`;
+        }
+
+        function preencherHoraEDataAtual() {
             const agora = new Date();
-            const sequencia = String(agora.getDate()).padStart(2, '0') +
-                              String(agora.getHours()).padStart(2, '0') +
-                              String(agora.getMinutes()).padStart(2, '0') +
-                              String(agora.getSeconds()).padStart(2, '0');
-            document.getElementById('os-numero').value = `AC-${sequencia}`;
+            const horas = String(agora.getHours()).padStart(2, '0');
+            const minutos = String(agora.getMinutes()).padStart(2, '0');
+            const ano = agora.getFullYear();
+            const mes = String(agora.getMonth() + 1).padStart(2, '0');
+            const dia = String(agora.getDate()).padStart(2, '0');
+
+            document.getElementById('input-hora').value = `${horas}:${minutos}`;
+            document.getElementById('data-atual').value = `${ano}-${mes}-${dia}`;
         }
 
-        function inicializarAssinaturas() {
-            const canvasTec = document.getElementById('signature-tecnico');
-            const canvasCli = document.getElementById('signature-cliente');
+        function inicializarEstados() {
+            const selectUf = document.getElementById('select-uf');
+            selectUf.innerHTML = '<option value="">UF</option>';
+            estadosBrasil.forEach(estado => {
+                const opt = document.createElement('option');
+                opt.value = estado.uf;
+                opt.innerText = estado.uf;
+                selectUf.appendChild(opt);
+            });
+            selectUf.value = "PI";
+            carregarCidades("PI");
+        }
 
-            function redimensionarCanvas(canvas) {
-                const ratio = Math.max(window.devicePixelRatio || 1, 1);
-                canvas.width = canvas.offsetWidth * ratio;
-                canvas.height = canvas.offsetHeight * ratio;
-                canvas.getContext("2d").scale(ratio, ratio);
+        async function carregarCidades(uf) {
+            const selectCidade = document.getElementById('select-cidade');
+            if (!uf) {
+                selectCidade.innerHTML = '<option value="">Selecione UF</option>';
+                return;
+            }
+            selectCidade.innerHTML = '<option value="">Carregando...</option>';
+
+            try {
+                const res = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios?orderBy=nome`);
+                const cidades = await res.json();
+
+                selectCidade.innerHTML = '';
+                cidades.forEach(cidade => {
+                    const opt = document.createElement('option');
+                    opt.value = cidade.nome;
+                    opt.innerText = cidade.nome;
+                    selectCidade.appendChild(opt);
+                });
+
+                if (cidades.length > 0) {
+                    selectCidade.selectedIndex = 0;
+                }
+            } catch (error) {
+                selectCidade.innerHTML = '<option value="">Digite a Cidade</option>';
+            }
+        }
+
+        /* Consulta ViaCEP Automática ao digitar 8 números */
+        async function consultarViaCEP(valor) {
+            const cepLimpo = valor.replace(/\D/g, '');
+            if (cepLimpo.length === 8) {
+                try {
+                    const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+                    const data = await response.json();
+                    if (!data.erro) {
+                        if (data.logradouro) {
+                            document.getElementById('inp-endereco').value = `${data.logradouro}${data.bairro ? ', ' + data.bairro : ''}`;
+                        }
+                        if (data.uf) {
+                            document.getElementById('select-uf').value = data.uf;
+                            await carregarCidades(data.uf);
+                            if (data.localidade) {
+                                document.getElementById('select-cidade').value = data.localidade;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.log('Erro ao buscar ViaCEP:', e);
+                }
+            }
+        }
+
+        async function buscarCepCidade(nomeCidade) {
+            const uf = document.getElementById('select-uf').value;
+            const inputCep = document.getElementById('input-cep');
+
+            if (!nomeCidade || !uf || inputCep.value.trim() !== '') return;
+
+            try {
+                const res = await fetch(`https://viacep.com.br/ws/${uf}/${encodeURIComponent(nomeCidade)}/Central/json/`);
+                const dados = await res.json();
+
+                if (Array.isArray(dados) && dados.length > 0 && dados[0].cep) {
+                    inputCep.value = dados[0].cep;
+                }
+            } catch (error) {}
+        }
+
+        function formatarMoeda(val) {
+            return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function alterarQtd(btn, delta) {
+            const tr = btn.closest('tr');
+            const inputQtd = tr.querySelector('.qtd-item');
+            let atual = parseInt(inputQtd.value) || 0;
+            atual += delta;
+            if (atual < 1) atual = 1;
+            inputQtd.value = atual;
+            atualizarSubtotalLinha(tr, 'qtd');
+        }
+
+        function atualizarSubtotalLinha(tr, origem) {
+            const inputQtd = tr.querySelector('.qtd-item');
+            const inputVunit = tr.querySelector('.vunit-item');
+            const inputVtotal = tr.querySelector('.vtotal-item');
+
+            const qtd = parseFloat(inputQtd.value) || 0;
+            const vunit = parseFloat(inputVunit.value) || 0;
+
+            if (origem === 'qtd' || origem === 'vunit') {
+                const calcTotal = qtd * vunit;
+                inputVtotal.value = calcTotal.toFixed(2);
             }
 
-            redimensionarCanvas(canvasTec);
-            redimensionarCanvas(canvasCli);
-
-            sigPadTecnico = new SignaturePad(canvasTec, { backgroundColor: 'rgb(255, 255, 255)' });
-            sigPadCliente = new SignaturePad(canvasCli, { backgroundColor: 'rgb(255, 255, 255)' });
+            recalcularTotaisGerais();
         }
 
-        function limparAssinatura(tipo) {
-            if (tipo === 'tecnico') sigPadTecnico.clear();
-            if (tipo === 'cliente') sigPadCliente.clear();
-        }
+        function recalcularTotaisGerais() {
+            const linhas = document.querySelectorAll('#corpo-tabela-itens tr');
+            let totalPecas = 0;
 
-        function adicionarLinhaPeca() {
-            const tbody = document.getElementById('corpo-tabela-pecas');
-            const tr = document.createElement('tr');
-            tr.className = 'border-b border-gray-200 item-peca';
+            linhas.forEach(tr => {
+                const vtotalInput = tr.querySelector('.vtotal-item');
+                const vtotal = parseFloat(vtotalInput.value) || 0;
+                totalPecas += vtotal;
+            });
+
+            const valServico = parseFloat(document.getElementById('inp-servico').value) || 0;
+            const valDesconto = parseFloat(document.getElementById('inp-desconto').value) || 0;
             
+            const totalGeral = Math.max(0, (totalPecas + valServico) - valDesconto);
+
+            document.getElementById('lbl-total-pecas').innerText = formatarMoeda(totalPecas);
+            document.getElementById('lbl-total-geral').innerText = formatarMoeda(totalGeral);
+        }
+
+        function adicionarLinha(qtd = "1", codigo = "", detalhamento = "", vunit = "0.00", vtotal = "0.00") {
+            const tbody = document.getElementById('corpo-tabela-itens');
+            const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td class="p-1 text-center">
-                    <input type="number" min="1" value="1" oninput="atualizarSubtotalLinha(this)" class="w-full text-center border border-gray-300 rounded p-1 focus:outline-none focus:border-blue-800 qtd-item">
+                <td class="text-center">
+                    <div class="flex items-center justify-center gap-0.5">
+                        <button type="button" onclick="alterarQtd(this, -1)" class="touch-btn no-print bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold w-5 h-5 min-w-0 min-h-0">-</button>
+                        <input type="number" value="${qtd}" min="1" oninput="atualizarSubtotalLinha(this.closest('tr'), 'qtd')" class="input-field text-center font-bold qtd-item w-6">
+                        <button type="button" onclick="alterarQtd(this, 1)" class="touch-btn no-print bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold w-5 h-5 min-w-0 min-h-0">+</button>
+                    </div>
                 </td>
-                <td class="p-1">
-                    <input type="text" placeholder="Nome do item" class="w-full border border-gray-300 rounded p-1 focus:outline-none focus:border-blue-800 desc-item">
+                <td><input type="text" value="${codigo}" placeholder="" class="input-field"></td>
+                <td><input type="text" value="${detalhamento}" placeholder="" class="input-field"></td>
+                <td class="text-right">
+                    <div class="flex items-center justify-end gap-0.5">
+                        <span class="text-[9px] text-gray-500">R$</span>
+                        <input type="number" step="0.01" value="${vunit}" oninput="atualizarSubtotalLinha(this.closest('tr'), 'vunit')" class="input-field text-right font-bold vunit-item w-14" placeholder="0.00">
+                    </div>
                 </td>
-                <td class="p-1">
-                    <input type="number" step="0.01" min="0" placeholder="0,00" oninput="atualizarSubtotalLinha(this)" class="w-full text-right border border-gray-300 rounded p-1 focus:outline-none focus:border-blue-800 valor-unit-item">
+                <td class="text-right">
+                    <div class="flex items-center justify-end gap-0.5">
+                        <span class="text-[9px] text-gray-500">R$</span>
+                        <input type="number" step="0.01" value="${vtotal}" oninput="atualizarSubtotalLinha(this.closest('tr'), 'vtotal')" class="input-field text-right font-bold vtotal-item w-16 text-blue-ac" placeholder="0.00">
+                    </div>
                 </td>
-                <td class="p-1">
-                    <input type="number" step="0.01" min="0" placeholder="0,00" oninput="calcularTotais()" class="w-full text-right border border-gray-300 rounded p-1 focus:outline-none focus:border-blue-800 valor-total-item">
-                </td>
-                <td class="p-1 text-center no-print">
-                    <button onclick="removerLinhaPeca(this)" class="text-red-500 font-bold hover:text-red-700 px-1 text-xs">✕</button>
+                <td class="text-center no-print col-acoes">
+                    <div class="flex items-center justify-center gap-0.5">
+                        <button type="button" onclick="adicionarLinha()" title="Adicionar outra linha" class="touch-btn bg-emerald-100 hover:bg-emerald-200 text-emerald-800 w-5 h-5 min-w-0 min-h-0">
+                            <i class="fa-solid fa-plus text-[9px]"></i>
+                        </button>
+                        <button type="button" onclick="removerLinha(this)" title="Remover item" class="touch-btn bg-red-100 hover:bg-red-200 text-red-700 w-5 h-5 min-w-0 min-h-0">
+                            <i class="fa-solid fa-trash-can text-[9px]"></i>
+                        </button>
+                    </div>
                 </td>
             `;
             tbody.appendChild(tr);
-            calcularTotais();
+            atualizarSubtotalLinha(tr, 'vunit');
         }
 
-        function removerLinhaPeca(btn) {
-            const tbody = document.getElementById('corpo-tabela-pecas');
+        function removerLinha(btn) {
+            const tbody = document.getElementById('corpo-tabela-itens');
             if (tbody.children.length > 1) {
                 btn.closest('tr').remove();
-                calcularTotais();
-            } else {
-                const tr = tbody.children[0];
-                tr.querySelector('.qtd-item').value = 1;
-                tr.querySelector('.desc-item').value = '';
-                tr.querySelector('.valor-unit-item').value = '';
-                tr.querySelector('.valor-total-item').value = '';
-                calcularTotais();
+                recalcularTotaisGerais();
             }
         }
 
-        function atualizarSubtotalLinha(input) {
-            const tr = input.closest('tr');
-            const qtd = parseFloat(tr.querySelector('.qtd-item').value) || 0;
-            const vUnit = parseFloat(tr.querySelector('.valor-unit-item').value) || 0;
-            
-            if (input.classList.contains('valor-unit-item') || input.classList.contains('qtd-item')) {
-                if (vUnit > 0) {
-                    tr.querySelector('.valor-total-item').value = (qtd * vUnit).toFixed(2);
+        const canvasCtxMap = {};
+
+        function setupCanvas(id) {
+            const canvas = document.getElementById(`canvas-${id}`);
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight || 65;
+
+            ctx.lineWidth = 1.8;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000000';
+
+            canvasCtxMap[id] = { canvas, ctx, desenhando: false };
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
+            }
+
+            function iniciar(e) {
+                canvasCtxMap[id].desenhando = true;
+                const p = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+            }
+
+            function desenhar(e) {
+                if (!canvasCtxMap[id].desenhando) return;
+                e.preventDefault();
+                const p = getPos(e);
+                ctx.lineTo(p.x, p.y);
+                ctx.stroke();
+            }
+
+            function parar() {
+                canvasCtxMap[id].desenhando = false;
+            }
+
+            canvas.addEventListener('mousedown', iniciar);
+            canvas.addEventListener('mousemove', desenhar);
+            canvas.addEventListener('mouseup', parar);
+            canvas.addEventListener('mouseleave', parar);
+
+            canvas.addEventListener('touchstart', iniciar, { passive: false });
+            canvas.addEventListener('touchmove', desenhar, { passive: false });
+            canvas.addEventListener('touchend', parar);
+        }
+
+        function limparCanvas(id) {
+            if (canvasCtxMap[id]) {
+                const { canvas, ctx } = canvasCtxMap[id];
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function limparAssinaturas() {
+            limparCanvas('tecnico');
+            limparCanvas('cliente');
+        }
+
+        function obterOpcoesPDF() {
+            const numOs = document.getElementById('num_os').value || 'AC-OS';
+            return {
+                margin:       [0, 0, 0, 0],
+                filename:     `OS_${numOs.trim()}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: 'avoid-all' }
+            };
+        }
+
+        /* GERAÇÃO DE PDF AJUSTADO PARA PÁGINA ÚNICA A4 */
+        function gerarPDF() {
+            const elemento = document.getElementById('os-documento');
+            html2pdf().set(obterOpcoesPDF()).from(elemento).save();
+        }
+
+        /* FUNÇÃO INTEGRADA AO BOTÃO IMPRIMIR: COMPARTILHAR NO CELULAR OU IMPRIMIR NO PC */
+        async function executarImpressaoOuCompartilhamento() {
+            const elemento = document.getElementById('os-documento');
+            const numOs = document.getElementById('num_os').value || 'AC-OS';
+
+            if (navigator.share && navigator.canShare) {
+                try {
+                    const pdfWorker = html2pdf().set(obterOpcoesPDF()).from(elemento);
+                    const pdfBlob = await pdfWorker.output('blob');
+                    const file = new File([pdfBlob], `OS_${numOs.trim()}.pdf`, { type: 'application/pdf' });
+
+                    if (navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: `Ordem de Serviço - ${numOs}`,
+                            text: `Ordem de Serviço ${numOs} - AC SERVIÇOS`
+                        });
+                        return;
+                    }
+                } catch (err) {
+                    console.log('Compartilhamento cancelado ou não suportado, usando fallback de impressão:', err);
                 }
             }
-            calcularTotais();
-        }
 
-        function calcularTotais() {
-            let totalPecas = 0;
-            const linhas = document.querySelectorAll('.item-peca');
-
-            linhas.forEach(tr => {
-                const totalItem = parseFloat(tr.querySelector('.valor-total-item').value) || 0;
-                totalPecas += totalItem;
-            });
-
-            const maoObra = parseFloat(document.getElementById('valor-mao-obra').value) || 0;
-            const totalGeral = totalPecas + maoObra;
-
-            document.getElementById('valor-total-pecas').value = totalPecas.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById('valor-total-geral').innerText = `R$ ${totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        }
-
-        function limparFormulario() {
-            if (confirm("Deseja realmente limpar todos os campos da Ordem de Serviço?")) {
-                document.querySelectorAll('input[type="text"], textarea, input[type="number"]').forEach(el => el.value = '');
-                document.getElementById('corpo-tabela-pecas').innerHTML = '';
-                adicionarLinhaPeca();
-                inicializarDataEHora();
-                gerarNumeroOS();
-                limparAssinatura('tecnico');
-                limparAssinatura('cliente');
-                document.getElementById('os-garantia').value = 'NÃO';
-                calcularTotais();
-            }
-        }
-
-        function baixarPDF() {
-            const element = document.getElementById('os-document');
-            const numOS = document.getElementById('os-numero').value || 'OS-SERVICO';
-            
-            const opt = {
-                margin: 5,
-                filename: `${numOS}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, logging: false },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: 'avoid-all' }
-            };
-
-            html2pdf().set(opt).from(element).save();
-        }
-
-        function compartilharOuImprimir() {
             window.print();
         }
+
+        window.onload = function() {
+            gerarNumeroOSAutomatico();
+            preencherHoraEDataAtual();
+            inicializarEstados();
+            setupCanvas('tecnico');
+            setupCanvas('cliente');
+
+            // Inicia com 1 linha vazia
+            adicionarLinha();
+        };
+
+        window.onresize = function() {
+            ['tecnico', 'cliente'].forEach(id => {
+                if (canvasCtxMap[id]) {
+                    canvasCtxMap[id].canvas.width = canvasCtxMap[id].canvas.parentElement.clientWidth;
+                    canvasCtxMap[id].canvas.height = canvasCtxMap[id].canvas.parentElement.clientHeight || 65;
+                }
+            });
+        };
     </script>
 </body>
 </html>
