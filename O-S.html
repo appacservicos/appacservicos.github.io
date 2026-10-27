@@ -412,7 +412,7 @@
                     <table class="os-table">
                         <tr>
                             <th colspan="6" class="text-center font-bold text-[10px] py-1 text-black bg-gray-50 border-black whitespace-nowrap overflow-hidden">
-                                 &nbsp;&nbsp; Serviços: <input type="text" id="os-servico" class="input-field font-bold w-28 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;"> &nbsp;|&nbsp; Equipamento: <input type="text" id="os-equipamento" class="input-field font-bold w-32 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;">
+                                &nbsp;&nbsp; Serviços: <input type="text" id="os-servico" class="input-field font-bold w-28 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;"> &nbsp;|&nbsp; Equipamento: <input type="text" id="os-equipamento" class="input-field font-bold w-32 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;">
                             </th>
                         </tr>
                         <tr class="header-blue-text-white text-[10px]">
@@ -473,7 +473,7 @@
                 <table class="os-table">
                     <tr>
                         <td class="py-1 px-1.5 text-center text-[9.5px]">
-                            O equipamento foi consertado e revisado, estando em perfeitas condições de funcionamento SIM  (    )          NÃO  (    ).
+                            O equipamento foi consertado e revisado, estando em perfeitas condições de funcionamento SIM  (    )         NÃO  (    ).
                         </td>
                     </tr>
                 </table>
@@ -668,8 +668,9 @@
                     const q = card.querySelector('.m-item-qtd').value || "1";
                     const cod = card.querySelector('.m-item-codigo').value || "";
                     const desc = card.querySelector('.m-item-desc').value || "";
-                    const vu = card.querySelector('.m-item-valor').value || "0.00";
-                    adicionarLinha(q, cod, desc, vu, vu);
+                    const vu = parseFloat(card.querySelector('.m-item-valor').value || "0").toFixed(2);
+                    const vt = (parseFloat(q) * parseFloat(vu)).toFixed(2);
+                    adicionarLinha(q, cod, desc, vu, vt);
                 });
             }
 
@@ -720,6 +721,20 @@
             atual += delta;
             if (atual < 1) atual = 1;
             inputQtd.value = atual;
+            atualizarSubtotalLinha(tr);
+        }
+
+        function atualizarSubtotalLinha(tr) {
+            const inputQtd = tr.querySelector('.qtd-item');
+            const inputVunit = tr.querySelector('.vunit-item');
+            const inputVtotal = tr.querySelector('.vtotal-item');
+
+            const qtd = parseFloat(inputQtd.value) || 0;
+            const vunit = parseFloat(inputVunit.value) || 0;
+
+            const calcTotal = qtd * vunit;
+            inputVtotal.value = calcTotal.toFixed(2);
+            
             recalcularTotaisGerais();
         }
 
@@ -748,7 +763,7 @@
                 <td class="text-center">
                     <div class="flex items-center justify-center gap-0.5">
                         <button type="button" onclick="alterarQtd(this, -1)" class="touch-btn no-print bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold w-4 h-4 min-w-0 min-h-0">-</button>
-                        <input type="number" value="${qtd}" min="1" oninput="recalcularTotaisGerais()" class="input-field text-center font-bold qtd-item w-5">
+                        <input type="number" value="${qtd}" min="1" oninput="atualizarSubtotalLinha(this.closest('tr'))" class="input-field text-center font-bold qtd-item w-5">
                         <button type="button" onclick="alterarQtd(this, 1)" class="touch-btn no-print bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold w-4 h-4 min-w-0 min-h-0">+</button>
                     </div>
                 </td>
@@ -757,7 +772,7 @@
                 <td class="text-right">
                     <div class="flex items-center justify-end gap-0.5">
                         <span class="text-[9px] text-gray-500">R$</span>
-                        <input type="number" step="0.01" value="${vunit}" class="input-field text-right font-bold vunit-item w-16">
+                        <input type="number" step="0.01" value="${vunit}" oninput="atualizarSubtotalLinha(this.closest('tr'))" class="input-field text-right font-bold vunit-item w-16">
                     </div>
                 </td>
                 <td class="text-right">
