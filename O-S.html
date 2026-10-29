@@ -441,7 +441,8 @@
                                     <td class="border-b border-black py-1 px-1.5 text-right">
                                         <div class="flex justify-end items-center gap-0.5">
                                             <span class="text-[10px] font-bold">R$</span>
-                                            <input type="number" id="inp-servico" step="0.01" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs" placeholder="0.00">
+                                            <!-- ALTERADO PARA TYPE="TEXT" PARA ACEITAR PONTO CORRETAMENTE E PARSEAR NO JS -->
+                                            <input type="text" id="inp-servico" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs" placeholder="0.00">
                                         </div>
                                     </td>
                                 </tr>
@@ -450,7 +451,8 @@
                                     <td class="border-b border-black py-1 px-1.5 text-right">
                                         <div class="flex justify-end items-center gap-0.5">
                                             <span class="text-[10px] font-bold text-red-600">- R$</span>
-                                            <input type="number" id="inp-desconto" step="0.01" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs text-red-600" placeholder="0.00">
+                                            <!-- ALTERADO PARA TYPE="TEXT" TAMBÉM PARA PADRONIZAR -->
+                                            <input type="text" id="inp-desconto" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs text-red-600" placeholder="0.00">
                                         </div>
                                     </td>
                                 </tr>
@@ -727,6 +729,22 @@
             recalcularTotaisGerais();
         }
 
+        // Função segura para converter valores monetários digitados (tratando pontos e vírgulas)
+        function parseValorMonetario(valorStr) {
+            if (!valorStr) return 0;
+            let limpo = String(valorStr).trim();
+            // Se o usuário digitou com ponto de milhar (ex: "1.000"), removemos os pontos e mantemos o número correto
+            if (limpo.includes('.') && limpo.indexOf('.') < limpo.length - 3) {
+                limpo = limpo.replace(/\./g, '');
+            } else if (limpo.includes('.') && limpo.includes(',')) {
+                limpo = limpo.replace(/\./g, '').replace(',', '.');
+            } else if (limpo.includes(',')) {
+                limpo = limpo.replace(',', '.');
+            }
+            const num = parseFloat(limpo);
+            return isNaN(num) ? 0 : num;
+        }
+
         function recalcularTotaisGerais() {
             const linhas = document.querySelectorAll('#corpo-tabela-itens tr');
             let totalPecas = 0;
@@ -737,8 +755,10 @@
                 totalPecas += vtotal;
             });
 
-            const valServico = parseFloat(document.getElementById('inp-servico').value) || 0;
-            const valDesconto = parseFloat(document.getElementById('inp-desconto').value) || 0;
+            // Tratamento corrigido para o campo de SERVIÇO e DESCONTO aceitando pontos
+            const valServico = parseValorMonetario(document.getElementById('inp-servico').value);
+            const valDesconto = parseValorMonetario(document.getElementById('inp-desconto').value);
+            
             const totalGeral = Math.max(0, (totalPecas + valServico) - valDesconto);
 
             document.getElementById('lbl-total-pecas').innerText = formatarMoeda(totalPecas);
@@ -910,7 +930,6 @@
                 btnBaixar.addEventListener('touchend', (e) => { e.preventDefault(); gerarPDF(); });
             }
 
-            // O botão "Imprimir" agora aciona a função de compartilhamento nativo com os apps do celular
             if (btnImprimir) {
                 btnImprimir.addEventListener('click', executarCompartilhamento);
                 btnImprimir.addEventListener('touchend', (e) => { e.preventDefault(); executarCompartilhamento(); });
