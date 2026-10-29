@@ -217,30 +217,33 @@
 
     <!-- ETAPA 1: FORMULÁRIO DE PREENCHIMENTO RÁPIDO PARA CELULAR -->
     <div id="etapa-formulario-inicial" class="form-mobile-wrap no-print">
-        <div class="flex items-center gap-2 mb-3">
-            <span class="bg-blue-ac text-white font-bold px-2 py-1 rounded text-xs">AC SERVIÇOS</span>
-            <span class="text-sm font-bold text-gray-800">Preenchimento da O.S. (Celular)</span>
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+                <span class="bg-blue-ac text-white font-bold px-2 py-1 rounded text-xs">AC SERVIÇOS</span>
+                <span class="text-sm font-bold text-gray-800">Preenchimento da O.S. (Celular)</span>
+            </div>
+            <button type="button" onclick="limparDadosSalvos()" class="text-xs text-red-600 hover:text-red-800 font-bold underline">Limpar Tudo</button>
         </div>
 
         <h2>Dados do Cliente</h2>
         <div class="field-group">
             <label>Cliente:</label>
-            <input type="text" id="m-cliente" placeholder="Nome do cliente">
+            <input type="text" id="m-cliente" placeholder="Nome do cliente" oninput="salvarDadosAutomaticamente()">
         </div>
         <div class="field-group">
             <label>Endereço:</label>
-            <input type="text" id="m-endereco" placeholder="Endereço completo">
+            <input type="text" id="m-endereco" placeholder="Endereço completo" oninput="salvarDadosAutomaticamente()">
         </div>
         <div class="grid grid-cols-2 gap-2">
             <div class="field-group">
                 <label>UF:</label>
-                <select id="m-uf" onchange="carregarCidadesForm(this.value)" class="cursor-pointer">
+                <select id="m-uf" onchange="carregarCidadesForm(this.value); salvarDadosAutomaticamente();" class="cursor-pointer">
                     <option value="PI">PI</option>
                 </select>
             </div>
             <div class="field-group">
                 <label>Cidade:</label>
-                <select id="m-cidade" onchange="buscarCepPorCidadeForm(this.value)" class="cursor-pointer">
+                <select id="m-cidade" onchange="buscarCepPorCidadeForm(this.value); salvarDadosAutomaticamente();" class="cursor-pointer">
                     <option value="Acauã">Acauã</option>
                 </select>
             </div>
@@ -248,11 +251,11 @@
         <div class="grid grid-cols-2 gap-2">
             <div class="field-group">
                 <label>Contato:</label>
-                <input type="text" id="m-contato" placeholder="Telefone / Zap">
+                <input type="text" id="m-contato" placeholder="Telefone / Zap" oninput="salvarDadosAutomaticamente()">
             </div>
             <div class="field-group">
                 <label>CEP:</label>
-                <input type="text" id="m-cep" placeholder="00000-000" maxlength="9" oninput="consultarViaCEPForm(this.value)">
+                <input type="text" id="m-cep" placeholder="00000-000" maxlength="9" oninput="consultarViaCEPForm(this.value); salvarDadosAutomaticamente();">
             </div>
         </div>
         <div class="grid grid-cols-2 gap-2">
@@ -262,7 +265,7 @@
             </div>
             <div class="field-group">
                 <label>Atendido por (Técnico):</label>
-                <input type="text" id="m-atendido" placeholder="Nome do técnico" oninput="atualizarChamadoTecnico()">
+                <input type="text" id="m-atendido" placeholder="Nome do técnico" oninput="atualizarChamadoTecnico(); salvarDadosAutomaticamente();">
             </div>
         </div>
 
@@ -270,11 +273,11 @@
         <div class="grid grid-cols-2 gap-2">
             <div class="field-group">
                 <label>Serviço:</label>
-                <input type="text" id="m-servico" placeholder="Ex: Manutenção">
+                <input type="text" id="m-servico" placeholder="Ex: Manutenção" oninput="salvarDadosAutomaticamente()">
             </div>
             <div class="field-group">
                 <label>Equipamento:</label>
-                <input type="text" id="m-equipamento" placeholder="Ex: Cadeira Odonto">
+                <input type="text" id="m-equipamento" placeholder="Ex: Cadeira Odonto" oninput="salvarDadosAutomaticamente()">
             </div>
         </div>
 
@@ -282,7 +285,7 @@
         <div id="lista-itens-mobile">
             <!-- Itens adicionados dinamicamente aqui -->
         </div>
-        <button type="button" onclick="adicionarItemMobile()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg text-sm mb-3 flex items-center justify-center gap-2 w-full">
+        <button type="button" onclick="adicionarItemMobile(); salvarDadosAutomaticamente();" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg text-sm mb-3 flex items-center justify-center gap-2 w-full">
             <i class="fa-solid fa-plus"></i> Adicionar Peça / Item
         </button>
 
@@ -296,8 +299,11 @@
     <div id="etapa-os-documento" class="hidden">
         
         <!-- BARRA DE AÇÕES APENAS COM BAIXAR E IMPRIMIR (COMPARTILHAR) -->
-        <div data-html2canvas-ignore="true" class="max-w-[210mm] mx-auto mb-3 bg-white p-3 border border-black rounded-lg shadow-lg no-print">
-            <div class="grid grid-cols-2 gap-3">
+        <div data-html2canvas-ignore="true" class="max-w-[210mm] mx-auto mb-3 bg-white p-3 border border-black rounded-lg shadow-lg no-print flex gap-3">
+            <button type="button" onclick="voltarParaEdicao()" class="touch-btn bg-gray-600 hover:bg-gray-700 text-white shadow w-1/3">
+                <i class="fa-solid fa-arrow-left"></i> Editar
+            </button>
+            <div class="grid grid-cols-2 gap-3 w-2/3">
                 <button id="btn-baixar" type="button" class="touch-btn bg-blue-ac hover:bg-blue-900 text-white shadow">
                     📄 Baixar PDF
                 </button>
@@ -481,11 +487,9 @@
                         <td class="w-1/4 py-0.5">CLIENTE</td>
                     </tr>
                     <tr>
-                        <!-- VISTO EM BRANCO -->
                         <td class="text-center align-middle p-0.5">
                             <input type="text" class="input-field text-center">
                         </td>
-                        <!-- DATA EM BRANCO -->
                         <td class="text-center align-middle p-0.5">
                             <input type="text" class="input-field text-center">
                         </td>
@@ -524,7 +528,6 @@
             { uf: "SP", nome: "São Paulo" }, { uf: "SE", nome: "Sergipe" }, { uf: "TO", nome: "Tocantins" }
         ];
 
-        // FUNÇÃO DE MÁSCARA MONETÁRIA EM TEMPO REAL (MANTÉM FORMATO BRASILEIRO 1.000,00)
         function aplicarMascaraMoeda(input) {
             let valor = input.value.replace(/\D/g, '');
             if (valor === '') {
@@ -535,9 +538,9 @@
             valor = valor.replace('.', ',');
             valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
             input.value = valor;
+            salvarDadosAutomaticamente();
         }
 
-        // CONVERTE FORMATO MONETÁRIO BRASILEIRO (1.000,00) EM NÚMERO FLOAT
         function parseValorMonetario(valorStr) {
             if (!valorStr) return 0;
             let limpo = String(valorStr).trim().replace(/\./g, '').replace(',', '.');
@@ -631,15 +634,15 @@
                 <div class="grid grid-cols-3 gap-2 mb-2">
                     <div class="field-group" style="margin-bottom:0">
                         <label>Qtd:</label>
-                        <input type="number" min="1" value="${qtd}" class="m-item-qtd">
+                        <input type="number" min="1" value="${qtd}" oninput="salvarDadosAutomaticamente()" class="m-item-qtd">
                     </div>
                     <div class="field-group" style="margin-bottom:0">
                         <label>Código:</label>
-                        <input type="text" value="${codigo}" class="m-item-codigo" placeholder="Cód peça">
+                        <input type="text" value="${codigo}" oninput="salvarDadosAutomaticamente()" class="m-item-codigo" placeholder="Cód peça">
                     </div>
                     <div class="field-group" style="margin-bottom:0">
                         <label>Garantia:</label>
-                        <select class="m-item-garantia">
+                        <select class="m-item-garantia" onchange="salvarDadosAutomaticamente()">
                             <option value="SIM" ${garantia === 'SIM' ? 'selected' : ''}>SIM</option>
                             <option value="NÃO" ${garantia === 'NÃO' ? 'selected' : ''}>NÃO</option>
                         </select>
@@ -647,22 +650,117 @@
                 </div>
                 <div class="field-group" style="margin-bottom:2px">
                     <label>Detalhamento / Descrição:</label>
-                    <input type="text" value="${detalhamento}" class="m-item-desc" placeholder="Nome da peça ou material">
+                    <input type="text" value="${detalhamento}" oninput="salvarDadosAutomaticamente()" class="m-item-desc" placeholder="Nome da peça ou material">
                 </div>
                 <div class="flex items-center justify-between mt-2">
                     <div class="field-group" style="margin-bottom:0; width: 60%">
                         <label>V. Unitário (R$):</label>
                         <input type="text" value="${valor}" oninput="aplicarMascaraMoeda(this)" class="m-item-valor" placeholder="0,00">
                     </div>
-                    <button type="button" onclick="this.closest('.item-card-mobile').remove()" class="bg-red-100 text-red-700 font-bold px-3 py-2 rounded text-xs self-end">
+                    <button type="button" onclick="this.closest('.item-card-mobile').remove(); salvarDadosAutomaticamente();" class="bg-red-100 text-red-700 font-bold px-3 py-2 rounded text-xs self-end">
                         <i class="fa-solid fa-trash-can"></i> Excluir
                     </button>
                 </div>
             `;
             container.appendChild(card);
+            salvarDadosAutomaticamente();
+        }
+
+        // SALVA TUDO AUTOMATICAMENTE NO NAVEGADOR
+        function salvarDadosAutomaticamente() {
+            const itens = [];
+            document.querySelectorAll('.item-card-mobile').forEach(card => {
+                itens.push({
+                    qtd: card.querySelector('.m-item-qtd').value,
+                    codigo: card.querySelector('.m-item-codigo').value,
+                    garantia: card.querySelector('.m-item-garantia').value,
+                    desc: card.querySelector('.m-item-desc').value,
+                    valor: card.querySelector('.m-item-valor').value
+                });
+            });
+
+            const dados = {
+                cliente: document.getElementById('m-cliente').value,
+                endereco: document.getElementById('m-endereco').value,
+                uf: document.getElementById('m-uf').value,
+                cidade: document.getElementById('m-cidade').value,
+                contato: document.getElementById('m-contato').value,
+                cep: document.getElementById('m-cep').value,
+                cham: document.getElementById('m-cham').value,
+                atendido: document.getElementById('m-atendido').value,
+                servico: document.getElementById('m-servico').value,
+                equipamento: document.getElementById('m-equipamento').value,
+                servicoVal: document.getElementById('inp-servico').value,
+                descontoVal: document.getElementById('inp-desconto').value,
+                itens: itens
+            };
+
+            localStorage.setItem('ac_dados_os', JSON.stringify(dados));
+        }
+
+        // RESTAURA OS DADOS SALVOS QUANDO A PÁGINA É RECARREGADA
+        function carregarDadosSalvos() {
+            const salvo = localStorage.getItem('ac_dados_os');
+            if (!salvo) {
+                adicionarItemMobile();
+                gerarNumeroOSAutomatico();
+                atualizarChamadoTecnico();
+                return;
+            }
+
+            try {
+                const dados = JSON.parse(salvo);
+                document.getElementById('m-cliente').value = dados.cliente || '';
+                document.getElementById('m-endereco').value = dados.endereco || '';
+                document.getElementById('m-uf').value = dados.uf || 'PI';
+                document.getElementById('m-contato').value = dados.contato || '';
+                document.getElementById('m-cep').value = dados.cep || '';
+                document.getElementById('m-cham').value = dados.cham || '';
+                document.getElementById('m-atendido').value = dados.atendido || '';
+                document.getElementById('m-servico').value = dados.servico || '';
+                document.getElementById('m-equipamento').value = dados.equipamento || '';
+                document.getElementById('inp-servico').value = dados.servicoVal || '0,00';
+                document.getElementById('inp-desconto').value = dados.descontoVal || '0,00';
+
+                if (dados.cidade) {
+                    setTimeout(() => { document.getElementById('m-cidade').value = dados.cidade; }, 500);
+                }
+
+                const container = document.getElementById('lista-itens-mobile');
+                container.innerHTML = '';
+                if (dados.itens && dados.itens.length > 0) {
+                    dados.itens.forEach(it => {
+                        adicionarItemMobile(it.qtd, it.codigo, it.desc, it.garantia, it.valor);
+                    });
+                } else {
+                    adicionarItemMobile();
+                }
+
+                if (!dados.cham) {
+                    gerarNumeroOSAutomatico();
+                    atualizarChamadoTecnico();
+                }
+            } catch (e) {
+                adicionarItemMobile();
+                gerarNumeroOSAutomatico();
+                atualizarChamadoTecnico();
+            }
+        }
+
+        function limparDadosSalvos() {
+            if (confirm("Deseja realmente limpar todos os dados preenchidos?")) {
+                localStorage.removeItem('ac_dados_os');
+                location.reload();
+            }
+        }
+
+        function voltarParaEdicao() {
+            document.getElementById('etapa-os-documento').classList.add('hidden');
+            document.getElementById('etapa-formulario-inicial').classList.remove('hidden');
         }
 
         function gerarOrdemDeServico() {
+            salvarDadosAutomaticamente();
             document.getElementById('os-cliente').value = document.getElementById('m-cliente').value;
             document.getElementById('os-endereco').value = document.getElementById('m-endereco').value;
             document.getElementById('os-uf').value = document.getElementById('m-uf').value;
@@ -707,6 +805,7 @@
         }
 
         function gerarNumeroOSAutomatico() {
+            if (document.getElementById('num_os').value) return;
             const agora = new Date();
             const ano = agora.getFullYear();
             const mes = String(agora.getMonth() + 1).padStart(2, '0');
@@ -721,7 +820,6 @@
             const horas = String(agora.getHours()).padStart(2, '0');
             const minutos = String(agora.getMinutes()).padStart(2, '0');
             document.getElementById('input-hora').value = `${horas}:${minutos}`;
-            // Mantido vazio para não injetar data automática na tabela final
         }
 
         function formatarMoeda(val) {
@@ -769,6 +867,7 @@
 
             document.getElementById('lbl-total-pecas').innerText = formatarMoeda(totalPecas);
             document.getElementById('lbl-total-geral').innerText = formatarMoeda(totalGeral);
+            salvarDadosAutomaticamente();
         }
 
         function adicionarLinha(qtd = "1", codigo = "", detalhamento = "", vunit = "0,00", vtotal = "0,00") {
@@ -875,10 +974,15 @@
         }
 
         function obterOpcoesPDF() {
-            const numOs = document.getElementById('num_os').value || 'AC-OS';
+            let nomeCliente = document.getElementById('os-cliente').value.trim() || 'Cliente';
+            nomeCliente = nomeCliente.replace(/[^a-zA-Z0-9À-ÿ\s]/g, '').replace(/\s+/g, '_');
+            let numChamado = document.getElementById('os-cham').value.trim() || 'CH';
+            let horaRegistro = document.getElementById('input-hora').value.trim().replace(':', '-') || '00-00';
+            const nomeArquivoFinal = `${nomeCliente}_${numChamado}_${horaRegistro}.pdf`;
+
             return {
                 margin: [0, 0, 0, 0],
-                filename: `OS_${numOs.trim()}.pdf`,
+                filename: nomeArquivoFinal,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
@@ -893,18 +997,22 @@
 
         async function executarCompartilhamento() {
             const elemento = document.getElementById('os-documento');
-            const numOs = document.getElementById('num_os').value || 'AC-OS';
+            let nomeCliente = document.getElementById('os-cliente').value.trim() || 'Cliente';
+            nomeCliente = nomeCliente.replace(/[^a-zA-Z0-9À-ÿ\s]/g, '').replace(/\s+/g, '_');
+            let numChamado = document.getElementById('os-cham').value.trim() || 'CH';
+            let horaRegistro = document.getElementById('input-hora').value.trim().replace(':', '-') || '00-00';
+            const nomeArquivoFinal = `${nomeCliente}_${numChamado}_${horaRegistro}.pdf`;
 
             try {
                 const pdfWorker = html2pdf().set(obterOpcoesPDF()).from(elemento);
                 const pdfBlob = await pdfWorker.output('blob');
-                const file = new File([pdfBlob], `OS_${numOs.trim()}.pdf`, { type: 'application/pdf' });
+                const file = new File([pdfBlob], nomeArquivoFinal, { type: 'application/pdf' });
                 
                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                     await navigator.share({
                         files: [file],
-                        title: `Ordem de Serviço - ${numOs}`,
-                        text: `Ordem de Serviço ${numOs} - AC SERVIÇOS`
+                        title: `Ordem de Serviço - ${nomeCliente}`,
+                        text: `Ordem de Serviço - ${nomeCliente} (${numChamado})`
                     });
                 } else {
                     pdfWorker.save();
@@ -915,12 +1023,10 @@
             }
         }
 
-        window.onload = function() {
-            gerarNumeroOSAutomatico();
-            atualizarChamadoTecnico();
+        window.onload = async function() {
             preencherHoraEDataAtual();
-            inicializarEstadosForm();
-            adicionarItemMobile();
+            await inicializarEstadosForm();
+            carregarDadosSalvos();
 
             const btnGerar = document.getElementById('btn-gerar-os');
             if (btnGerar) {
