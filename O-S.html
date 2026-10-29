@@ -405,7 +405,7 @@
                 <div class="table-responsive-mobile">
                     <table class="os-table">
                         <tr>
-                            <th colspan="6" class="text-center font-bold text-[10px] py-1 text-black bg-gray-50 border-black whitespace-nowrap overflow-hidden">
+                            <th colspan="5" class="text-center font-bold text-[10px] py-1 text-black bg-gray-50 border-black whitespace-nowrap overflow-hidden">
                                 &nbsp;&nbsp; Serviços: <input type="text" id="os-servico" class="input-field font-bold w-28 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;"> &nbsp;|&nbsp; Equipamento: <input type="text" id="os-equipamento" class="input-field font-bold w-32 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;">
                             </th>
                         </tr>
@@ -441,7 +441,7 @@
                                     <td class="border-b border-black py-1 px-1.5 text-right">
                                         <div class="flex justify-end items-center gap-0.5">
                                             <span class="text-[10px] font-bold">R$</span>
-                                            <input type="text" id="inp-servico" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs" placeholder="0.00">
+                                            <input type="text" id="inp-servico" value="0,00" oninput="aplicarMascaraMoeda(this); recalcularTotaisGerais();" class="input-field text-right w-16 font-bold text-xs" placeholder="0,00">
                                         </div>
                                     </td>
                                 </tr>
@@ -450,7 +450,7 @@
                                     <td class="border-b border-black py-1 px-1.5 text-right">
                                         <div class="flex justify-end items-center gap-0.5">
                                             <span class="text-[10px] font-bold text-red-600">- R$</span>
-                                            <input type="text" id="inp-desconto" value="0.00" oninput="recalcularTotaisGerais()" class="input-field text-right w-16 font-bold text-xs text-red-600" placeholder="0.00">
+                                            <input type="text" id="inp-desconto" value="0,00" oninput="aplicarMascaraMoeda(this); recalcularTotaisGerais();" class="input-field text-right w-16 font-bold text-xs text-red-600" placeholder="0,00">
                                         </div>
                                     </td>
                                 </tr>
@@ -481,11 +481,13 @@
                         <td class="w-1/4 py-0.5">CLIENTE</td>
                     </tr>
                     <tr>
+                        <!-- VISTO EM BRANCO -->
                         <td class="text-center align-middle p-0.5">
                             <input type="text" class="input-field text-center">
                         </td>
+                        <!-- DATA EM BRANCO -->
                         <td class="text-center align-middle p-0.5">
-                            <input type="text" id="data-atual" class="input-field text-center font-bold">
+                            <input type="text" class="input-field text-center">
                         </td>
                         <td colspan="2" class="p-0 border-0"></td>
                     </tr>
@@ -521,6 +523,27 @@
             { uf: "RO", nome: "Rondônia" }, { uf: "RR", nome: "Roraima" }, { uf: "SC", nome: "Santa Catarina" },
             { uf: "SP", nome: "São Paulo" }, { uf: "SE", nome: "Sergipe" }, { uf: "TO", nome: "Tocantins" }
         ];
+
+        // FUNÇÃO DE MÁSCARA MONETÁRIA EM TEMPO REAL (MANTÉM FORMATO BRASILEIRO 1.000,00)
+        function aplicarMascaraMoeda(input) {
+            let valor = input.value.replace(/\D/g, '');
+            if (valor === '') {
+                input.value = '0,00';
+                return;
+            }
+            valor = (parseInt(valor, 10) / 100).toFixed(2);
+            valor = valor.replace('.', ',');
+            valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            input.value = valor;
+        }
+
+        // CONVERTE FORMATO MONETÁRIO BRASILEIRO (1.000,00) EM NÚMERO FLOAT
+        function parseValorMonetario(valorStr) {
+            if (!valorStr) return 0;
+            let limpo = String(valorStr).trim().replace(/\./g, '').replace(',', '.');
+            const num = parseFloat(limpo);
+            return isNaN(num) ? 0 : num;
+        }
 
         async function inicializarEstadosForm() {
             const selectUf = document.getElementById('m-uf');
@@ -600,7 +623,7 @@
             document.getElementById('m-cham').value = `${prefixo}-${numerosAleatorios}`;
         }
 
-        function adicionarItemMobile(qtd = 1, codigo = "", detalhamento = "", garantia = "SIM", valor = "0.00") {
+        function adicionarItemMobile(qtd = 1, codigo = "", detalhamento = "", garantia = "SIM", valor = "0,00") {
             const container = document.getElementById('lista-itens-mobile');
             const card = document.createElement('div');
             card.className = 'item-card-mobile';
@@ -629,7 +652,7 @@
                 <div class="flex items-center justify-between mt-2">
                     <div class="field-group" style="margin-bottom:0; width: 60%">
                         <label>V. Unitário (R$):</label>
-                        <input type="number" step="0.01" value="${valor}" class="m-item-valor">
+                        <input type="text" value="${valor}" oninput="aplicarMascaraMoeda(this)" class="m-item-valor" placeholder="0,00">
                     </div>
                     <button type="button" onclick="this.closest('.item-card-mobile').remove()" class="bg-red-100 text-red-700 font-bold px-3 py-2 rounded text-xs self-end">
                         <i class="fa-solid fa-trash-can"></i> Excluir
@@ -662,9 +685,14 @@
                     const q = card.querySelector('.m-item-qtd').value || "1";
                     const cod = card.querySelector('.m-item-codigo').value || "";
                     const desc = card.querySelector('.m-item-desc').value || "";
-                    const vu = parseFloat(card.querySelector('.m-item-valor').value || "0").toFixed(2);
-                    const vt = (parseFloat(q) * parseFloat(vu)).toFixed(2);
-                    adicionarLinha(q, cod, desc, vu, vt);
+                    const vuRaw = card.querySelector('.m-item-valor').value || "0,00";
+                    const vuNum = parseValorMonetario(vuRaw);
+                    const vtNum = parseFloat(q) * vuNum;
+                    
+                    const vuFormatted = vuNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    const vtFormatted = vtNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                    adicionarLinha(q, cod, desc, vuFormatted, vtFormatted);
                 });
             }
 
@@ -692,11 +720,8 @@
             const agora = new Date();
             const horas = String(agora.getHours()).padStart(2, '0');
             const minutos = String(agora.getMinutes()).padStart(2, '0');
-            const ano = agora.getFullYear();
-            const mes = String(agora.getMonth() + 1).padStart(2, '0');
-            const dia = String(agora.getDate()).padStart(2, '0');
             document.getElementById('input-hora').value = `${horas}:${minutos}`;
-            document.getElementById('data-atual').value = `${dia}/${mes}/${ano}`;
+            // Mantido vazio para não injetar data automática na tabela final
         }
 
         function formatarMoeda(val) {
@@ -719,26 +744,12 @@
             const inputVtotal = tr.querySelector('.vtotal-item');
 
             const qtd = parseFloat(inputQtd.value) || 0;
-            const vunit = parseFloat(inputVunit.value) || 0;
+            const vunit = parseValorMonetario(inputVunit.value);
 
             const calcTotal = qtd * vunit;
-            inputVtotal.value = calcTotal.toFixed(2);
+            inputVtotal.value = calcTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             
             recalcularTotaisGerais();
-        }
-
-        function parseValorMonetario(valorStr) {
-            if (!valorStr) return 0;
-            let limpo = String(valorStr).trim();
-            if (limpo.includes('.') && limpo.indexOf('.') < limpo.length - 3) {
-                limpo = limpo.replace(/\./g, '');
-            } else if (limpo.includes('.') && limpo.includes(',')) {
-                limpo = limpo.replace(/\./g, '').replace(',', '.');
-            } else if (limpo.includes(',')) {
-                limpo = limpo.replace(',', '.');
-            }
-            const num = parseFloat(limpo);
-            return isNaN(num) ? 0 : num;
         }
 
         function recalcularTotaisGerais() {
@@ -747,7 +758,7 @@
 
             linhas.forEach(tr => {
                 const vtotalInput = tr.querySelector('.vtotal-item');
-                const vtotal = parseFloat(vtotalInput.value) || 0;
+                const vtotal = parseValorMonetario(vtotalInput.value);
                 totalPecas += vtotal;
             });
 
@@ -760,7 +771,7 @@
             document.getElementById('lbl-total-geral').innerText = formatarMoeda(totalGeral);
         }
 
-        function adicionarLinha(qtd = "1", codigo = "", detalhamento = "", vunit = "0.00", vtotal = "0.00") {
+        function adicionarLinha(qtd = "1", codigo = "", detalhamento = "", vunit = "0,00", vtotal = "0,00") {
             const tbody = document.getElementById('corpo-tabela-itens');
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -776,13 +787,13 @@
                 <td class="text-right">
                     <div class="flex items-center justify-end gap-0.5">
                         <span class="text-[9px] text-gray-500">R$</span>
-                        <input type="number" step="0.01" value="${vunit}" oninput="atualizarSubtotalLinha(this.closest('tr'))" class="input-field text-right font-bold vunit-item w-16">
+                        <input type="text" value="${vunit}" oninput="aplicarMascaraMoeda(this); atualizarSubtotalLinha(this.closest('tr'));" class="input-field text-right font-bold vunit-item w-16" placeholder="0,00">
                     </div>
                 </td>
                 <td class="text-right">
                     <div class="flex items-center justify-end gap-0.5">
                         <span class="text-[9px] text-gray-500">R$</span>
-                        <input type="number" step="0.01" value="${vtotal}" oninput="recalcularTotaisGerais()" class="input-field text-right font-bold vtotal-item w-16 text-blue-ac">
+                        <input type="text" value="${vtotal}" oninput="aplicarMascaraMoeda(this); recalcularTotaisGerais();" class="input-field text-right font-bold vtotal-item w-16 text-blue-ac" placeholder="0,00">
                     </div>
                 </td>
                 <td class="text-center no-print col-acoes" data-html2canvas-ignore="true">
