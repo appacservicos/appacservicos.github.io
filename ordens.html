@@ -1,374 +1,618 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Ordens de Serviço - AC Serviços</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ordens de Serviço - AC Serviços</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    body {
-      background-color: #e2e8f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+        body {
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-    .app-wrapper {
-      width: 100%;
-      max-width: 420px;
-      background-color: #f8fafc;
-      min-height: 100vh;
-      position: relative;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
+        .app-wrapper {
+            width: 100%;
+            max-width: 480px;
+            background-color: #f8fafc;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
 
-    /* Cabeçalho Azul */
-    .header-banner {
-      background-color: #003b8e;
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: #ffffff;
-    }
+        /* Cabeçalho Azul */
+        .header-banner {
+            background-color: #2b3990;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
 
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    .header-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
+        .home-btn {
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+        }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+        .home-btn:active {
+            background: rgba(255, 255, 255, 0.28);
+        }
 
-    .icon-btn {
-      background: none;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-    }
+        .header-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
 
-    /* Filtros e Abas de Status */
-    .filters-container {
-      padding: 12px 14px;
-      background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
+        /* Barra de Busca */
+        .search-bar-wrap {
+            padding: 10px 14px 4px 14px;
+            background: #ffffff;
+        }
 
-    .filters-container::-webkit-scrollbar {
-      display: none;
-    }
+        .search-input {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            outline: none;
+        }
 
-    .filter-tab {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      border: 1px solid #cbd5e1;
-      background: #f1f5f9;
-      color: #64748b;
-      white-space: nowrap;
-      cursor: pointer;
-    }
+        .search-input:focus {
+            border-color: #2b3990;
+            background: #ffffff;
+        }
 
-    .filter-tab.active {
-      background: #0066ff;
-      color: #ffffff;
-      border-color: #0066ff;
-      box-shadow: 0 2px 6px rgba(0, 102, 255, 0.25);
-    }
+        /* Filtros e Abas de Status */
+        .filters-container {
+            padding: 10px 14px;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
 
-    /* Lista de OS */
-    .container {
-      padding: 14px;
-      flex: 1;
-      overflow-y: auto;
-      padding-bottom: 80px;
-    }
+        .filters-container::-webkit-scrollbar {
+            display: none;
+        }
 
-    .os-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-      position: relative;
-    }
+        .filter-tab {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border: 1px solid #cbd5e1;
+            background: #f1f5f9;
+            color: #64748b;
+            white-space: nowrap;
+            cursor: pointer;
+        }
 
-    .os-card-content {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      flex: 1;
-    }
+        .filter-tab.active {
+            background: #2b3990;
+            color: #ffffff;
+            border-color: #2b3990;
+            box-shadow: 0 2px 6px rgba(43, 57, 144, 0.25);
+        }
 
-    .os-icon-box {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background-color: #eff6ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #0066ff;
-      flex-shrink: 0;
-    }
+        /* Lista de OS */
+        .container {
+            padding: 14px;
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 140px;
+        }
 
-    .os-details h3 {
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 2px;
-    }
+        .os-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        }
 
-    .os-details p {
-      font-size: 0.78rem;
-      color: #475569;
-      margin-bottom: 2px;
-    }
+        .os-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
 
-    .os-date {
-      font-size: 0.72rem;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 4px;
-    }
+        .os-card-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex: 1;
+        }
 
-    .os-right-side {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 12px;
-    }
+        .os-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2b3990;
+            flex-shrink: 0;
+        }
 
-    /* Badges de Status */
-    .status-badge {
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 12px;
-      white-space: nowrap;
-    }
+        .os-details h3 {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 3px;
+        }
 
-    .status-manutencao { background-color: #fee2e2; color: #dc2626; }
-    .status-aguardando { background-color: #fef3c7; color: #d97706; }
-    .status-concluida { background-color: #dcfce7; color: #16a34a; }
-    .status-andamento { background-color: #e0f2fe; color: #0284c7; }
-    .status-aberta { background-color: #f1f5f9; color: #64748b; }
+        .os-details p {
+            font-size: 0.78rem;
+            color: #475569;
+            margin-bottom: 2px;
+        }
 
-    /* Botão de Apagar */
-    .delete-btn {
-      background: none;
-      border: none;
-      color: #94a3b8;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      padding: 4px;
-      border-radius: 4px;
-      transition: color 0.2s, background 0.2s;
-    }
+        .os-valor {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #2b3990;
+            margin-top: 4px;
+        }
 
-    .delete-btn:hover {
-      color: #ef4444;
-      background-color: #ffeeef;
-    }
+        .os-date {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 4px;
+        }
 
-    /* Estado Vazio */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: #64748b;
-    }
+        /* Seletor de Status */
+        .status-select {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
 
-    .empty-state svg {
-      width: 52px;
-      height: 52px;
-      stroke: #cbd5e1;
-      margin-bottom: 12px;
-    }
+        .status-aguardando {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
 
-    .empty-state h3 {
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: #334155;
-      margin-bottom: 6px;
-    }
+        .status-concluida {
+            background-color: #dcfce7;
+            color: #16a34a;
+        }
 
-    .empty-state p {
-      font-size: 0.8rem;
-      line-height: 1.4;
-    }
+        .status-andamento {
+            background-color: #e0f2fe;
+            color: #0284c7;
+        }
 
-    /* Botão Flutuante (+) */
-    .fab-btn {
-      position: fixed;
-      bottom: 24px;
-      right: calc(50% - 190px);
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, #0077ff 0%, #0044cc 100%);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
-      border: none;
-      cursor: pointer;
-      z-index: 10;
-    }
-  </style>
+        .status-aberta {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+
+        /* Barra de Ações do Card */
+        .os-card-footer {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .btn-abrir-os {
+            flex: 1;
+            background-color: #2b3990;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-abrir-os:active {
+            background-color: #1e286b;
+        }
+
+        .delete-btn {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Estado Vazio */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+        }
+
+        .empty-state svg {
+            width: 52px;
+            height: 52px;
+            stroke: #cbd5e1;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .empty-state p {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .btn-criar-primeira {
+            background: #2b3990;
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* Botão Flutuante (+) */
+        .fab-btn {
+            position: fixed;
+            bottom: 76px;
+            right: max(16px, calc(50% - 220px));
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #2b3990 0%, #1d4ed8 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(43, 57, 144, 0.4);
+            border: none;
+            cursor: pointer;
+            z-index: 900;
+        }
+
+        /* Rodapé fixo */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.68rem;
+        }
+
+        .nav-item.active {
+            color: #2b3990;
+            font-weight: bold;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+    </style>
 </head>
+
 <body>
 
-  <div class="app-wrapper">
-    <!-- Cabeçalho -->
-    <header class="header-banner">
-      <div class="header-left">
-        <button class="icon-btn" onclick="window.location.href='index.html'">
-          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
-        </button>
-        <h1 class="header-title">Ordens de Serviço</h1>
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn">
-          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-        <button class="icon-btn">
-          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-        </button>
-      </div>
-    </header>
+    <div class="app-wrapper">
+        <!-- Cabeçalho -->
+        <header class="header-banner">
+            <div class="header-left">
+                <a href="index.html" class="home-btn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2.5">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    </svg>
+                    Início
+                </a>
+                <h1 class="header-title">Ordens de Serviço</h1>
+            </div>
+        </header>
 
-    <!-- Filtros de Status -->
-    <div class="filters-container">
-      <button class="filter-tab active" onclick="filtrarOS('todas', this)">Todas</button>
-      <button class="filter-tab" onclick="filtrarOS('aberta', this)">Abertas</button>
-      <button class="filter-tab" onclick="filtrarOS('andamento', this)">Em andamento</button>
-      <button class="filter-tab" onclick="filtrarOS('aguardando', this)">Aguardando peça</button>
-      <button class="filter-tab" onclick="filtrarOS('concluida', this)">Concluídas</button>
+        <!-- Campo de Pesquisa -->
+        <div class="search-bar-wrap">
+            <input type="text" id="campoBuscaOS" class="search-input" placeholder="🔍 Buscar por cliente, número da O.S. ou equipamento..." oninput="aplicarFiltros()">
+        </div>
+
+        <!-- Filtros de Status -->
+        <div class="filters-container">
+            <button class="filter-tab active" onclick="filtrarOS('todas', this)">Todas</button>
+            <button class="filter-tab" onclick="filtrarOS('aberta', this)">Abertas</button>
+            <button class="filter-tab" onclick="filtrarOS('andamento', this)">Em andamento</button>
+            <button class="filter-tab" onclick="filtrarOS('aguardando', this)">Aguardando peça</button>
+            <button class="filter-tab" onclick="filtrarOS('concluida', this)">Concluídas</button>
+        </div>
+
+        <!-- Lista Dinâmica de OS -->
+        <main class="container" id="listaOS"></main>
+
+        <!-- Botão Flutuante (+) para Nova OS -->
+        <button class="fab-btn" onclick="novaOrdemServico()" title="Nova Ordem de Serviço">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="3">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+
+        <!-- Rodapé Fixo -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Início
+            </a>
+            <a href="ordens.html" class="nav-item active">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                </svg>
+                OS
+            </a>
+            <a href="clientes.html" class="nav-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Clientes
+            </a>
+            <a href="orcamento.html" class="nav-item">
+                <svg viewBox="0 0 24 24">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <line x1="6" y1="8" x2="18" y2="8"></line>
+                </svg>
+                Orçamento
+            </a>
+            <a href="O-S.html" class="nav-item">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                Nova OS
+            </a>
+        </nav>
     </div>
 
-    <!-- Lista Dinâmica de OS -->
-    <main class="container" id="listaOS">
-      <!-- O conteúdo será injetado dinamicamente via JavaScript -->
-    </main>
+    <script>
+        let statusFiltroAtual = 'todas';
 
-    <!-- Botão Flutuante (+) -->
-    <button class="fab-btn" onclick="window.location.href='orcamento.html'">
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-    </button>
-  </div>
+        function carregarOrdensServico() {
+            const container = document.getElementById('listaOS');
+            const ordensSalvas = JSON.parse(localStorage.getItem('ac_lista_os')) || [];
 
-  <script>
-    function carregarOrdensServico() {
-      const container = document.getElementById('listaOS');
-      const ordensSalvas = JSON.parse(localStorage.getItem('ac_lista_os')) || [];
-
-      if (ordensSalvas.length === 0) {
-        container.innerHTML = `
+            if (ordensSalvas.length === 0) {
+                container.innerHTML = `
           <div class="empty-state">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
             <h3>Nenhuma Ordem de Serviço encontrada</h3>
-            <p>Gere um novo orçamento ou OS para começar a visualizar os registos salvos aqui no histórico.</p>
+            <p>Clique em "Gerar Ordem de Serviço A4" na tela de O.S. para que uma cópia fique salva aqui automaticamente.</p>
+            <a href="O-S.html" class="btn-criar-primeira">+ Criar Ordem de Serviço</a>
           </div>
         `;
-        return;
-      }
+                return;
+            }
 
-      let html = '';
-      ordensSalvas.forEach((os, index) => {
-        html += `
-          <div class="os-card" data-status="${os.statusClasse || 'andamento'}">
-            <div class="os-card-content">
-              <div class="os-icon-box">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-              </div>
-              <div class="os-details">
-                <h3>${os.numero}</h3>
-                <p>Cliente: ${os.cliente}</p>
-                <p>Equipamento: ${os.equipamento}</p>
-                <div class="os-date">
-                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                  ${os.data}
+            let html = '';
+            ordensSalvas.forEach((os, index) => {
+                const stClasse = os.statusClasse || 'aberta';
+                const stEstilo = os.statusEstilo || 'status-aberta';
+
+                html += `
+          <div class="os-card" data-status="${stClasse}" data-busca="${(os.numero + ' ' + os.cliente + ' ' + os.equipamento).toLowerCase()}">
+            <div class="os-card-top">
+              <div class="os-card-content">
+                <div class="os-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                </div>
+                <div class="os-details">
+                  <h3>${os.numero}</h3>
+                  <p><strong>Cliente:</strong> ${os.cliente}</p>
+                  <p><strong>Equipamento:</strong> ${os.equipamento}</p>
+                  ${os.valorTotal ? `<div class="os-valor">Total: ${os.valorTotal}</div>` : ''}
+                  <div class="os-date">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    ${os.data}
+                  </div>
                 </div>
               </div>
+              
+              <select class="status-select ${stEstilo}" onchange="alterarStatusOS(${index}, this.value)">
+                <option value="aberta" ${stClasse === 'aberta' ? 'selected' : ''}>Aberta</option>
+                <option value="andamento" ${stClasse === 'andamento' ? 'selected' : ''}>Em andamento</option>
+                <option value="aguardando" ${stClasse === 'aguardando' ? 'selected' : ''}>Aguardando peça</option>
+                <option value="concluida" ${stClasse === 'concluida' ? 'selected' : ''}>Concluída</option>
+              </select>
             </div>
-            <div class="os-right-side">
-              <span class="status-badge ${os.statusEstilo || 'status-andamento'}">${os.statusTexto || 'Em andamento'}</span>
+
+            <div class="os-card-footer">
+              <button class="btn-abrir-os" onclick="abrirEditarOS(${index})">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                Analisar / Editar / Baixar PDF
+              </button>
               <button class="delete-btn" onclick="apagarOS(${index})" title="Apagar OS">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
               </button>
             </div>
           </div>
         `;
-      });
+            });
 
-      container.innerHTML = html;
-    }
-
-    function apagarOS(index) {
-      if (confirm("Tem certeza que deseja apagar esta Ordem de Serviço do histórico?")) {
-        let ordensSalvas = JSON.parse(localStorage.getItem('ac_lista_os')) || [];
-        ordensSalvas.splice(index, 1); // Remove o item pelo índice
-        localStorage.setItem('ac_lista_os', JSON.stringify(ordensSalvas));
-        carregarOrdensServico(); // Recarrega a lista no ecrã
-      }
-    }
-
-    function filtrarOS(status, elemento) {
-      document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
-      elemento.classList.add('active');
-
-      const cards = document.querySelectorAll('.os-card');
-      cards.forEach(card => {
-        if (status === 'todas') {
-          card.style.display = 'flex';
-        } else {
-          const cardStatus = card.getAttribute('data-status');
-          if (cardStatus && cardStatus.includes(status)) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
+            container.innerHTML = html;
+            aplicarFiltros();
         }
-      });
-    }
 
-    window.onload = carregarOrdensServico;
-  </script>
+        function abrirEditarOS(index) {
+            const ordensSalvas = JSON.parse(localStorage.getItem('ac_lista_os')) || [];
+            const osSelecionada = ordensSalvas[index];
+            if (!osSelecionada) return;
+
+            const dadosParaCarregar = osSelecionada.dadosCompletos || {
+                num_os: osSelecionada.numero,
+                cliente: osSelecionada.cliente,
+                equipamento: osSelecionada.equipamento,
+                servico: osSelecionada.servico || '',
+                itens: []
+            };
+
+            localStorage.setItem('ac_editar_os_selecionada', JSON.stringify(dadosParaCarregar));
+            window.location.href = 'O-S.html';
+        }
+
+        function novaOrdemServico() {
+            localStorage.removeItem('ac_dados_os');
+            window.location.href = 'O-S.html';
+        }
+
+        function alterarStatusOS(index, novoStatus) {
+            let ordensSalvas = JSON.parse(localStorage.getItem('ac_lista_os')) || [];
+            if (!ordensSalvas[index]) return;
+
+            const mapaStatus = {
+                aberta: {
+                    estilo: 'status-aberta',
+                    texto: 'Aberta'
+                },
+                andamento: {
+                    estilo: 'status-andamento',
+                    texto: 'Em andamento'
+                },
+                aguardando: {
+                    estilo: 'status-aguardando',
+                    texto: 'Aguardando peça'
+                },
+                concluida: {
+                    estilo: 'status-concluida',
+                    texto: 'Concluída'
+                }
+            };
+
+            ordensSalvas[index].statusClasse = novoStatus;
+            ordensSalvas[index].statusEstilo = mapaStatus[novoStatus].estilo;
+            ordensSalvas[index].statusTexto = mapaStatus[novoStatus].texto;
+
+            localStorage.setItem('ac_lista_os', JSON.stringify(ordensSalvas));
+            carregarOrdensServico();
+        }
+
+        function apagarOS(index) {
+            if (confirm("Tem certeza que deseja apagar esta Ordem de Serviço do histórico?")) {
+                let ordensSalvas = JSON.parse(localStorage.getItem('ac_lista_os')) || [];
+                ordensSalvas.splice(index, 1);
+                localStorage.setItem('ac_lista_os', JSON.stringify(ordensSalvas));
+                carregarOrdensServico();
+            }
+        }
+
+        function filtrarOS(status, elemento) {
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            elemento.classList.add('active');
+            statusFiltroAtual = status;
+            aplicarFiltros();
+        }
+
+        function aplicarFiltros() {
+            const termo = (document.getElementById('campoBuscaOS').value || '').toLowerCase().trim();
+            const cards = document.querySelectorAll('.os-card');
+
+            cards.forEach(card => {
+                const cardStatus = card.getAttribute('data-status') || '';
+                const cardBusca = card.getAttribute('data-busca') || '';
+
+                const bateStatus = (statusFiltroAtual === 'todas') || cardStatus.includes(statusFiltroAtual);
+                const bateTexto = !termo || cardBusca.includes(termo);
+
+                card.style.display = (bateStatus && bateTexto) ? 'block' : 'none';
+            });
+        }
+
+        window.onload = carregarOrdensServico;
+    </script>
 
 </body>
+
 </html>
