@@ -288,7 +288,7 @@
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGAÇÃO SUPERIOR (VOLTAR AO INÍCIO / VER ORDENS) -->
+    <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
     <div class="top-nav-bar no-print" data-html2canvas-ignore="true">
         <a href="index.html" class="top-nav-btn">
             <i class="fa-solid fa-house"></i> Início
@@ -512,13 +512,10 @@
                     </table>
                 </div>
 
-                <!-- OBSERVAÇÕES E TOTAIS -->
+                <!-- TOTAIS (LADO ESQUERDO) E OBSERVAÇÕES (LADO DIREITO) -->
                 <table class="os-table">
                     <tr>
-                        <td class="w-[65%] align-top p-1.5 border-black">
-                            <span class="font-bold block mb-0.5 text-[10px]">Observações:</span>
-                            <textarea id="os-obs" rows="4" oninput="salvarCopiaNoHistorico()" class="input-field w-full resize-none text-[10px]"></textarea>
-                        </td>
+                        <!-- Bloco de Totais à Esquerda -->
                         <td class="w-[35%] p-0 align-top border-black">
                             <table class="w-full h-full border-collapse">
                                 <tr>
@@ -548,6 +545,11 @@
                                     <td id="lbl-total-geral" class="font-bold py-1 px-1.5 text-right text-xs text-blue-ac">R$ 0,00</td>
                                 </tr>
                             </table>
+                        </td>
+                        <!-- Bloco de Observações à Direita -->
+                        <td class="w-[65%] align-top p-1.5 border-black">
+                            <span class="font-bold block mb-0.5 text-[10px]">Observações:</span>
+                            <textarea id="os-obs" rows="4" oninput="salvarCopiaNoHistorico()" class="input-field w-full resize-none text-[10px]"></textarea>
                         </td>
                     </tr>
                 </table>
@@ -732,7 +734,6 @@
             localStorage.setItem('ac_dados_os', JSON.stringify(dados));
         }
 
-        // SALVA CÓPIA COMPLETA NA LISTA DA PÁGINA ORDENS (ac_lista_os)
         function salvarCopiaNoHistorico() {
             salvarDadosAutomaticamente();
             const dados = obterObjetoDadosAtual();
@@ -767,7 +768,6 @@
             localStorage.setItem('ac_lista_os', JSON.stringify(listaOS));
         }
 
-        // SINCRONIZA EDIÇÕES FEITAS DIRETO NA FOLHA A4
         function sincronizarA4ParaForm() {
             document.getElementById('m-cliente').value = document.getElementById('os-cliente').value;
             document.getElementById('m-endereco').value = document.getElementById('os-endereco').value;
@@ -813,14 +813,13 @@
         }
 
         function carregarDadosSalvos() {
-            // Verifica se o usuário clicou para abrir/editar uma O.S. vinda da página ordens.html
             const osParaEditar = localStorage.getItem('ac_editar_os_selecionada');
             if (osParaEditar) {
                 localStorage.removeItem('ac_editar_os_selecionada');
                 try {
                     const dados = JSON.parse(osParaEditar);
                     preencherFormularioComObjeto(dados);
-                    gerarOrdemDeServico(false); // Abre direto na folha A4
+                    gerarOrdemDeServico(false);
                     return;
                 } catch (e) {
                     console.error("Erro ao abrir OS selecionada:", e);
@@ -849,7 +848,7 @@
         }
 
         function limparDadosSalvos() {
-            if (confirm("Deseja limpar o formulário para iniciar uma nova Ordem de Serviço? (As O.S. já geradas continuam salvas na aba Ordens)")) {
+            if (confirm("Deseja limpar o formulário para iniciar uma nova Ordem de Serviço?")) {
                 localStorage.removeItem('ac_dados_os');
                 location.reload();
             }
