@@ -5,14 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>AC Serviços - Painel</title>
   
-  <!-- Configurações para o atalho na tela inicial abrir com cara de app (Tela Cheia) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="AC Serviços">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#2b3990">
 
-  <!-- Ícone personalizado para a tela inicial do celular -->
   <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
 
@@ -33,7 +31,6 @@
       justify-content: center;
     }
 
-    /* Container Principal que simula o App Mobile */
     .app-wrapper {
       width: 100%;
       max-width: 480px;
@@ -43,7 +40,6 @@
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
     }
 
-    /* Cabeçalho */
     .header-banner {
       background-color: #2b3990;
       padding: 20px 16px;
@@ -61,7 +57,6 @@
       display: block;
     }
 
-    /* Container Conteúdo */
     .container {
       padding: 20px 16px;
     }
@@ -82,7 +77,6 @@
       margin-top: 3px;
     }
 
-    /* Grid de Botões (2 colunas exatas como na sua imagem) */
     .actions-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -108,7 +102,6 @@
       transition: transform 0.1s ease;
     }
 
-    /* Botão Principal (+ Ordem de Serviço) */
     .action-btn.primary {
       background: #2b3990;
       color: #ffffff;
@@ -130,7 +123,6 @@
       stroke-linejoin: round;
     }
 
-    /* Rodapé fixo */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -174,29 +166,25 @@
 <body>
 
   <div class="app-wrapper">
-    <!-- Cabeçalho -->
     <header class="header-banner">
       <img src="AClogomarca.png" alt="AC Serviços" class="brand-logo-full">
     </header>
 
-    <!-- Conteúdo Principal -->
     <main class="container">
       <div class="welcome-text">
         <h2>Olá, Técnico!</h2>
         <p>Acompanhe suas ordens de serviços e mantenha seu trabalho sempre organizado.</p>
       </div>
 
-      <!-- Grid de Botões -->
       <div class="actions-grid">
-        <!-- BOTÃO AZUL COM LINK DIRETO PARA A TELA NOVA OS -->
         <a href="O-S.html" class="action-btn primary">
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          Ordens de Serviços
+          Nova Ordem de Serviço
         </a>
 
         <a href="ordens.html" class="action-btn">
           <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-          Ordens de Serviços
+          Ordens Salvas
         </a>
 
         <a href="clientes.html" class="action-btn">
@@ -221,27 +209,26 @@
       </div>
     </main>
 
-    <!-- Rodapé -->
     <nav class="bottom-nav">
       <a href="index.html" class="nav-item active">
         <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
         Início
       </a>
-      <a href="ordens-servico.html" class="nav-item">
+      <a href="ordens.html" class="nav-item">
         <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
         OS
       </a>
-      <a href="#" class="nav-item">
+      <a href="clientes.html" class="nav-item">
         <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
         Clientes
       </a>
-      <a href="#" class="nav-item">
+      <a href="orcamento.html" class="nav-item">
         <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="6" y1="8" x2="18" y2="8"></line></svg>
         Orçamento
       </a>
-      <a href="#" class="nav-item">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-        Mais
+      <a href="O-S.html" class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        Nova OS
       </a>
     </nav>
   </div>
