@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AC SERVIÇOS - Ordem de Serviço</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- html2pdf.js para exportação direta em PDF A4 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -23,16 +20,52 @@
             background-color: #0f172a;
             color: #000000;
             margin: 0;
-            padding: 10px 5px;
+            padding: 10px 5px 80px 5px;
         }
 
         .bg-blue-ac { background-color: #003882 !important; }
         .text-blue-ac { color: #003882 !important; }
 
+        /* BARRA SUPERIOR DE NAVEGAÇÃO */
+        .top-nav-bar {
+            max-width: 650px;
+            margin: 0 auto 10px auto;
+            background: #1e293b;
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
+        .top-nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #2b3990;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 7px 12px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .top-nav-btn:hover {
+            background: #3b4cca;
+        }
+
+        .top-nav-btn.secondary {
+            background: #334155;
+        }
+
         /* ESTILOS DO FORMULÁRIO INICIAL MÓVEL (ETAPA 1) */
         .form-mobile-wrap {
             max-width: 650px;
-            margin: 10px auto;
+            margin: 0 auto;
             background: #ffffff;
             border-radius: 12px;
             padding: 16px;
@@ -87,7 +120,7 @@
             position: relative;
         }
 
-        /* CONTAINER FOLHA A4 IDÊNTICO AO ANEXO (ETAPA 2) */
+        /* CONTAINER FOLHA A4 (ETAPA 2) */
         .page-a4 {
             width: 210mm;
             max-height: 295mm;
@@ -177,8 +210,48 @@
             background-color: #ffffff;
         }
 
+        /* RODAPÉ FIXO PARA NAVEGAÇÃO RÁPIDA */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.68rem;
+        }
+
+        .nav-item.active {
+            color: #2b3990;
+            font-weight: bold;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
         @media screen and (max-width: 768px) {
-            body { padding: 4px; }
+            body { padding: 6px 4px 80px 4px; }
             .page-a4 {
                 width: 100% !important;
                 max-height: none !important;
@@ -198,7 +271,7 @@
 
         @media print {
             body { background: #ffffff !important; padding: 0 !important; margin: 0 !important; }
-            .no-print, #etapa-formulario-inicial, .col-acoes { display: none !important; }
+            .no-print, #etapa-formulario-inicial, .col-acoes, .top-nav-bar, .bottom-nav { display: none !important; }
             #etapa-os-documento { display: block !important; }
             .page-a4 {
                 box-shadow: none !important;
@@ -215,6 +288,17 @@
 </head>
 <body>
 
+    <!-- BARRA DE NAVEGAÇÃO SUPERIOR (VOLTAR AO INÍCIO / VER ORDENS) -->
+    <div class="top-nav-bar no-print" data-html2canvas-ignore="true">
+        <a href="index.html" class="top-nav-btn">
+            <i class="fa-solid fa-house"></i> Início
+        </a>
+        <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Ordem de Serviço</span>
+        <a href="ordens.html" class="top-nav-btn secondary">
+            <i class="fa-solid fa-folder-open"></i> Ordens Salvas
+        </a>
+    </div>
+
     <!-- ETAPA 1: FORMULÁRIO DE PREENCHIMENTO RÁPIDO PARA CELULAR -->
     <div id="etapa-formulario-inicial" class="form-mobile-wrap no-print">
         <div class="flex items-center justify-between mb-3 gap-2">
@@ -223,7 +307,7 @@
                 <span class="text-sm font-bold text-gray-800">Preenchimento da O.S.</span>
             </div>
             <button type="button" onclick="limparDadosSalvos()" class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white text-xs font-extrabold px-3.5 py-2 rounded-lg shadow-md flex items-center gap-1.5 uppercase tracking-wide transition">
-                <i class="fa-solid fa-trash-can"></i> LIMPAR TUDO
+                <i class="fa-solid fa-trash-can"></i> NOVA / LIMPAR
             </button>
         </div>
 
@@ -280,9 +364,7 @@
         </div>
 
         <h2>Peças e Materiais (Itens e Garantias)</h2>
-        <div id="lista-itens-mobile">
-            <!-- Itens adicionados dinamicamente aqui -->
-        </div>
+        <div id="lista-itens-mobile"></div>
         <button type="button" onclick="adicionarItemMobile(); salvarDadosAutomaticamente();" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg text-sm mb-3 flex items-center justify-center gap-2 w-full">
             <i class="fa-solid fa-plus"></i> Adicionar Peça / Item
         </button>
@@ -296,7 +378,13 @@
     <!-- ETAPA 2: DOCUMENTO OFICIAL A4 (OCULTO ATÉ CLICAR EM GERAR) -->
     <div id="etapa-os-documento" class="hidden">
         
-        <!-- BARRA DE AÇÕES APENAS COM BAIXAR E IMPRIMIR (COMPARTILHAR) -->
+        <!-- AVISO DE SALVAMENTO AUTOMÁTICO -->
+        <div id="toast-salvo" data-html2canvas-ignore="true" class="max-w-[210mm] mx-auto mb-2 bg-emerald-100 border border-emerald-400 text-emerald-900 px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between no-print">
+            <span><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Cópia salva automaticamente na aba "Ordens"!</span>
+            <a href="ordens.html" class="underline text-emerald-800 hover:text-black">Ver Lista &rarr;</a>
+        </div>
+
+        <!-- BARRA DE AÇÕES -->
         <div data-html2canvas-ignore="true" class="max-w-[210mm] mx-auto mb-3 bg-white p-3 border border-black rounded-lg shadow-lg no-print flex gap-3">
             <button type="button" onclick="voltarParaEdicao()" class="touch-btn bg-gray-600 hover:bg-gray-700 text-white shadow w-1/3">
                 <i class="fa-solid fa-arrow-left"></i> Editar
@@ -311,7 +399,7 @@
             </div>
         </div>
 
-        <!-- FOLHA DA ORDEM DE SERVIÇO EXATA DO ANEXO -->
+        <!-- FOLHA DA ORDEM DE SERVIÇO -->
         <div id="os-documento" class="page-a4">
             <div>
                 <!-- CABEÇALHO -->
@@ -321,9 +409,8 @@
                             <div class="flex items-center gap-2.5">
                                 <img src="AClogomarca.png" alt="AC SERVIÇOS Logo" class="h-10 w-auto object-contain shrink-0" onerror="this.onerror=null; this.outerHTML='<div class=\'w-10 h-10 border-2 border-white rounded-full flex items-center justify-center font-bold text-lg text-white shrink-0\'>AC</div>';">
                                 <div>
-                                    <div class="font-bold text-base leading-tight tracking-wider text-white"></div>
-                                    <div class="text-[8.5px] text-gray-200"></div>
-                                    <div class="text-[11px] font-bold mt-0.5 text-white"></div>
+                                    <div class="font-bold text-base leading-tight tracking-wider text-white">AC SERVIÇOS</div>
+                                    <div class="text-[8.5px] text-gray-200">Assistência Técnica Especializada</div>
                                 </div>
                             </div>
                         </td>
@@ -331,8 +418,8 @@
                             <div class="flex items-center justify-start gap-1 font-bold text-xs">
                                 <span class="text-black shrink-0">ORDEM DE SERVIÇO:</span>
                                 <div class="flex items-center w-full">
-                                    <input type="text" id="num_os" value="" class="input-field font-bold text-xs text-blue-ac border-b border-gray-400 focus:border-black">
-                                    <button type="button" data-html2canvas-ignore="true" onclick="gerarNumeroOSAutomatico()" title="Gerar número" class="no-print text-gray-500 hover:text-black ml-1 text-[11px] p-1 shrink-0">
+                                    <input type="text" id="num_os" value="" oninput="salvarCopiaNoHistorico()" class="input-field font-bold text-xs text-blue-ac border-b border-gray-400 focus:border-black">
+                                    <button type="button" data-html2canvas-ignore="true" onclick="gerarNumeroOSAutomatico(true)" title="Gerar número" class="no-print text-gray-500 hover:text-black ml-1 text-[11px] p-1 shrink-0">
                                         <i class="fa-solid fa-arrows-rotate"></i>
                                     </button>
                                 </div>
@@ -347,7 +434,7 @@
                         <td>
                             <div class="flex items-center">
                                 <span class="font-bold mr-1 shrink-0">Cliente:</span>
-                                <input type="text" id="os-cliente" class="input-field font-bold">
+                                <input type="text" id="os-cliente" oninput="sincronizarA4ParaForm()" class="input-field font-bold">
                             </div>
                         </td>
                     </tr>
@@ -355,7 +442,7 @@
                         <td>
                             <div class="flex items-center">
                                 <span class="font-bold mr-1 shrink-0">Endereço:</span>
-                                <input type="text" id="os-endereco" class="input-field">
+                                <input type="text" id="os-endereco" oninput="sincronizarA4ParaForm()" class="input-field">
                             </div>
                         </td>
                     </tr>
@@ -364,15 +451,15 @@
                             <div class="grid grid-cols-12 gap-1 items-center">
                                 <div class="col-span-3 flex items-center">
                                     <span class="font-bold mr-1 shrink-0">UF:</span>
-                                    <input type="text" id="os-uf" class="input-field font-bold">
+                                    <input type="text" id="os-uf" oninput="sincronizarA4ParaForm()" class="input-field font-bold">
                                 </div>
                                 <div class="col-span-5 flex items-center border-l border-black pl-1">
                                     <span class="font-bold mr-1 shrink-0">Cidade:</span>
-                                    <input type="text" id="os-cidade" class="input-field">
+                                    <input type="text" id="os-cidade" oninput="sincronizarA4ParaForm()" class="input-field">
                                 </div>
                                 <div class="col-span-4 flex items-center border-l border-black pl-1">
                                     <span class="font-bold mr-1 shrink-0">Contato:</span>
-                                    <input type="text" id="os-contato" class="input-field">
+                                    <input type="text" id="os-contato" oninput="sincronizarA4ParaForm()" class="input-field">
                                 </div>
                             </div>
                         </td>
@@ -382,15 +469,15 @@
                             <div class="grid grid-cols-12 gap-1 items-center">
                                 <div class="col-span-4 flex items-center">
                                     <span class="font-bold mr-1 shrink-0">CEP:</span>
-                                    <input type="text" id="os-cep" placeholder="00000-000" class="input-field font-bold">
+                                    <input type="text" id="os-cep" placeholder="00000-000" oninput="sincronizarA4ParaForm()" class="input-field font-bold">
                                 </div>
                                 <div class="col-span-4 flex items-center border-l border-black pl-1">
                                     <span class="font-bold mr-1 shrink-0">Cham:</span>
-                                    <input type="text" id="os-cham" class="input-field font-bold">
+                                    <input type="text" id="os-cham" oninput="sincronizarA4ParaForm()" class="input-field font-bold">
                                 </div>
                                 <div class="col-span-4 flex items-center border-l border-black pl-1">
                                     <span class="font-bold mr-1 shrink-0">Hora:</span>
-                                    <input type="text" id="input-hora" class="input-field font-bold">
+                                    <input type="text" id="input-hora" oninput="salvarCopiaNoHistorico()" class="input-field font-bold">
                                 </div>
                             </div>
                         </td>
@@ -399,7 +486,7 @@
                         <td>
                             <div class="flex items-center">
                                 <span class="font-bold mr-1 shrink-0">Atendido por:</span>
-                                <input type="text" id="os-atendido" class="input-field">
+                                <input type="text" id="os-atendido" oninput="sincronizarA4ParaForm()" class="input-field">
                             </div>
                         </td>
                     </tr>
@@ -410,7 +497,7 @@
                     <table class="os-table">
                         <tr>
                             <th colspan="5" class="text-center font-bold text-[10px] py-1 text-black bg-gray-50 border-black whitespace-nowrap overflow-hidden">
-                                &nbsp;&nbsp; Serviços: <input type="text" id="os-servico" class="input-field font-bold w-28 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;"> &nbsp;|&nbsp; Equipamento: <input type="text" id="os-equipamento" class="input-field font-bold w-32 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;">
+                                &nbsp;&nbsp; Serviços: <input type="text" id="os-servico" oninput="sincronizarA4ParaForm()" class="input-field font-bold w-28 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;"> &nbsp;|&nbsp; Equipamento: <input type="text" id="os-equipamento" oninput="sincronizarA4ParaForm()" class="input-field font-bold w-32 text-center border-b border-black inline-block text-blue-ac" style="display:inline-block !important;">
                             </th>
                         </tr>
                         <tr class="header-blue-text-white text-[10px]">
@@ -421,9 +508,7 @@
                             <th class="w-24 text-right border-black">VALOR TOTAL</th>
                             <th data-html2canvas-ignore="true" class="w-10 text-center border-black no-print col-acoes">#</th>
                         </tr>
-                        <tbody id="corpo-tabela-itens">
-                            <!-- Linhas geradas via script -->
-                        </tbody>
+                        <tbody id="corpo-tabela-itens"></tbody>
                     </table>
                 </div>
 
@@ -432,7 +517,7 @@
                     <tr>
                         <td class="w-[65%] align-top p-1.5 border-black">
                             <span class="font-bold block mb-0.5 text-[10px]">Observações:</span>
-                            <textarea id="os-obs" rows="4" class="input-field w-full resize-none text-[10px]"></textarea>
+                            <textarea id="os-obs" rows="4" oninput="salvarCopiaNoHistorico()" class="input-field w-full resize-none text-[10px]"></textarea>
                         </td>
                         <td class="w-[35%] p-0 align-top border-black">
                             <table class="w-full h-full border-collapse">
@@ -486,10 +571,10 @@
                     </tr>
                     <tr>
                         <td class="text-center align-middle p-0.5">
-                            <input type="text" class="input-field text-center">
+                            <input type="text" id="os-visto" oninput="salvarCopiaNoHistorico()" class="input-field text-center">
                         </td>
                         <td class="text-center align-middle p-0.5">
-                            <input type="text" class="input-field text-center">
+                            <input type="text" id="os-data-campo" oninput="salvarCopiaNoHistorico()" class="input-field text-center">
                         </td>
                         <td colspan="2" class="p-0 border-0"></td>
                     </tr>
@@ -511,6 +596,30 @@
             </div>
         </div>
     </div>
+
+    <!-- RODAPÉ FIXO -->
+    <nav class="bottom-nav no-print" data-html2canvas-ignore="true">
+        <a href="index.html" class="nav-item">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            Início
+        </a>
+        <a href="ordens.html" class="nav-item">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+            OS Salvas
+        </a>
+        <a href="clientes.html" class="nav-item">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            Clientes
+        </a>
+        <a href="orcamento.html" class="nav-item">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="6" y1="8" x2="18" y2="8"></line></svg>
+            Orçamento
+        </a>
+        <a href="O-S.html" class="nav-item active">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            Nova OS
+        </a>
+    </nav>
 
     <!-- SCRIPTS -->
     <script>
@@ -584,8 +693,7 @@
             salvarDadosAutomaticamente();
         }
 
-        // SALVA TUDO AUTOMATICAMENTE NO NAVEGADOR
-        function salvarDadosAutomaticamente() {
+        function obterObjetoDadosAtual() {
             const itens = [];
             document.querySelectorAll('.item-card-mobile').forEach(card => {
                 itens.push({
@@ -597,7 +705,8 @@
                 });
             });
 
-            const dados = {
+            return {
+                num_os: document.getElementById('num_os').value,
                 cliente: document.getElementById('m-cliente').value,
                 endereco: document.getElementById('m-endereco').value,
                 uf: document.getElementById('m-uf').value,
@@ -610,14 +719,114 @@
                 equipamento: document.getElementById('m-equipamento').value,
                 servicoVal: document.getElementById('inp-servico').value,
                 descontoVal: document.getElementById('inp-desconto').value,
+                obs: document.getElementById('os-obs') ? document.getElementById('os-obs').value : '',
+                visto: document.getElementById('os-visto') ? document.getElementById('os-visto').value : '',
+                dataCampo: document.getElementById('os-data-campo') ? document.getElementById('os-data-campo').value : '',
+                hora: document.getElementById('input-hora') ? document.getElementById('input-hora').value : '',
                 itens: itens
             };
+        }
 
+        function salvarDadosAutomaticamente() {
+            const dados = obterObjetoDadosAtual();
             localStorage.setItem('ac_dados_os', JSON.stringify(dados));
         }
 
-        // RESTAURA OS DADOS SALVOS QUANDO A PÁGINA É RECARREGADA
+        // SALVA CÓPIA COMPLETA NA LISTA DA PÁGINA ORDENS (ac_lista_os)
+        function salvarCopiaNoHistorico() {
+            salvarDadosAutomaticamente();
+            const dados = obterObjetoDadosAtual();
+            const numeroOS = dados.num_os || `AC-${Date.now()}`;
+            
+            let listaOS = JSON.parse(localStorage.getItem('ac_lista_os')) || [];
+            const agora = new Date();
+            const dataFormatada = `${agora.toLocaleDateString('pt-BR')} às ${dados.hora || agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}`;
+            const totalGeral = document.getElementById('lbl-total-geral').innerText || 'R$ 0,00';
+
+            const indiceExistente = listaOS.findIndex(item => item.numero === numeroOS);
+
+            const registroOS = {
+                numero: numeroOS,
+                cliente: dados.cliente.trim() || 'Cliente não informado',
+                equipamento: dados.equipamento.trim() || 'Equipamento não informado',
+                servico: dados.servico.trim() || '',
+                valorTotal: totalGeral,
+                data: indiceExistente >= 0 ? listaOS[indiceExistente].data : dataFormatada,
+                statusClasse: indiceExistente >= 0 ? listaOS[indiceExistente].statusClasse : 'aberta',
+                statusEstilo: indiceExistente >= 0 ? listaOS[indiceExistente].statusEstilo : 'status-aberta',
+                statusTexto: indiceExistente >= 0 ? listaOS[indiceExistente].statusTexto : 'Aberta',
+                dadosCompletos: dados
+            };
+
+            if (indiceExistente >= 0) {
+                listaOS[indiceExistente] = registroOS;
+            } else {
+                listaOS.unshift(registroOS);
+            }
+
+            localStorage.setItem('ac_lista_os', JSON.stringify(listaOS));
+        }
+
+        // SINCRONIZA EDIÇÕES FEITAS DIRETO NA FOLHA A4
+        function sincronizarA4ParaForm() {
+            document.getElementById('m-cliente').value = document.getElementById('os-cliente').value;
+            document.getElementById('m-endereco').value = document.getElementById('os-endereco').value;
+            document.getElementById('m-uf').value = document.getElementById('os-uf').value;
+            document.getElementById('m-cidade').value = document.getElementById('os-cidade').value;
+            document.getElementById('m-contato').value = document.getElementById('os-contato').value;
+            document.getElementById('m-cep').value = document.getElementById('os-cep').value;
+            document.getElementById('m-cham').value = document.getElementById('os-cham').value;
+            document.getElementById('m-atendido').value = document.getElementById('os-atendido').value;
+            document.getElementById('m-servico').value = document.getElementById('os-servico').value;
+            document.getElementById('m-equipamento').value = document.getElementById('os-equipamento').value;
+            salvarCopiaNoHistorico();
+        }
+
+        function preencherFormularioComObjeto(dados) {
+            if (dados.num_os) document.getElementById('num_os').value = dados.num_os;
+            document.getElementById('m-cliente').value = dados.cliente || '';
+            document.getElementById('m-endereco').value = dados.endereco || '';
+            document.getElementById('m-uf').value = dados.uf || '';
+            document.getElementById('m-cidade').value = dados.cidade || '';
+            document.getElementById('m-contato').value = dados.contato || '';
+            document.getElementById('m-cep').value = dados.cep || '';
+            document.getElementById('m-cham').value = dados.cham || '';
+            document.getElementById('m-atendido').value = dados.atendido || '';
+            document.getElementById('m-servico').value = dados.servico || '';
+            document.getElementById('m-equipamento').value = dados.equipamento || '';
+            document.getElementById('inp-servico').value = dados.servicoVal || '0,00';
+            document.getElementById('inp-desconto').value = dados.descontoVal || '0,00';
+            if (dados.obs !== undefined) document.getElementById('os-obs').value = dados.obs;
+            if (dados.visto !== undefined) document.getElementById('os-visto').value = dados.visto;
+            if (dados.dataCampo !== undefined) document.getElementById('os-data-campo').value = dados.dataCampo;
+            if (dados.hora) document.getElementById('input-hora').value = dados.hora;
+
+            const container = document.getElementById('lista-itens-mobile');
+            container.innerHTML = '';
+            if (dados.itens && dados.itens.length > 0) {
+                dados.itens.forEach(it => {
+                    adicionarItemMobile(it.qtd, it.codigo, it.desc, it.garantia, it.valor);
+                });
+            } else {
+                adicionarItemMobile();
+            }
+        }
+
         function carregarDadosSalvos() {
+            // Verifica se o usuário clicou para abrir/editar uma O.S. vinda da página ordens.html
+            const osParaEditar = localStorage.getItem('ac_editar_os_selecionada');
+            if (osParaEditar) {
+                localStorage.removeItem('ac_editar_os_selecionada');
+                try {
+                    const dados = JSON.parse(osParaEditar);
+                    preencherFormularioComObjeto(dados);
+                    gerarOrdemDeServico(false); // Abre direto na folha A4
+                    return;
+                } catch (e) {
+                    console.error("Erro ao abrir OS selecionada:", e);
+                }
+            }
+
             const salvo = localStorage.getItem('ac_dados_os');
             if (!salvo) {
                 adicionarItemMobile();
@@ -628,33 +837,10 @@
 
             try {
                 const dados = JSON.parse(salvo);
-                document.getElementById('m-cliente').value = dados.cliente || '';
-                document.getElementById('m-endereco').value = dados.endereco || '';
-                document.getElementById('m-uf').value = dados.uf || '';
-                document.getElementById('m-cidade').value = dados.cidade || '';
-                document.getElementById('m-contato').value = dados.contato || '';
-                document.getElementById('m-cep').value = dados.cep || '';
-                document.getElementById('m-cham').value = dados.cham || '';
-                document.getElementById('m-atendido').value = dados.atendido || '';
-                document.getElementById('m-servico').value = dados.servico || '';
-                document.getElementById('m-equipamento').value = dados.equipamento || '';
-                document.getElementById('inp-servico').value = dados.servicoVal || '0,00';
-                document.getElementById('inp-desconto').value = dados.descontoVal || '0,00';
+                preencherFormularioComObjeto(dados);
 
-                const container = document.getElementById('lista-itens-mobile');
-                container.innerHTML = '';
-                if (dados.itens && dados.itens.length > 0) {
-                    dados.itens.forEach(it => {
-                        adicionarItemMobile(it.qtd, it.codigo, it.desc, it.garantia, it.valor);
-                    });
-                } else {
-                    adicionarItemMobile();
-                }
-
-                if (!dados.cham) {
-                    gerarNumeroOSAutomatico();
-                    atualizarChamadoTecnico();
-                }
+                if (!dados.num_os) gerarNumeroOSAutomatico();
+                if (!dados.cham) atualizarChamadoTecnico();
             } catch (e) {
                 adicionarItemMobile();
                 gerarNumeroOSAutomatico();
@@ -663,7 +849,7 @@
         }
 
         function limparDadosSalvos() {
-            if (confirm("Deseja realmente limpar todos os dados preenchidos?")) {
+            if (confirm("Deseja limpar o formulário para iniciar uma nova Ordem de Serviço? (As O.S. já geradas continuam salvas na aba Ordens)")) {
                 localStorage.removeItem('ac_dados_os');
                 location.reload();
             }
@@ -672,10 +858,13 @@
         function voltarParaEdicao() {
             document.getElementById('etapa-os-documento').classList.add('hidden');
             document.getElementById('etapa-formulario-inicial').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function gerarOrdemDeServico() {
+        function gerarOrdemDeServico(salvarNoHistorico = true) {
+            gerarNumeroOSAutomatico();
             salvarDadosAutomaticamente();
+
             document.getElementById('os-cliente').value = document.getElementById('m-cliente').value;
             document.getElementById('os-endereco').value = document.getElementById('m-endereco').value;
             document.getElementById('os-uf').value = document.getElementById('m-uf').value;
@@ -712,29 +901,41 @@
             document.getElementById('etapa-formulario-inicial').classList.add('hidden');
             document.getElementById('etapa-os-documento').classList.remove('hidden');
 
-            recalcularTotaisGerais();
+            recalcularTotaisGerais(false);
+            if (salvarNoHistorico) {
+                salvarCopiaNoHistorico();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             setTimeout(() => {
                 setupCanvas('tecnico');
                 setupCanvas('cliente');
             }, 100);
         }
 
-        function gerarNumeroOSAutomatico() {
-            if (document.getElementById('num_os').value) return;
+        function gerarNumeroOSAutomatico(forcarNovo = false) {
+            if (document.getElementById('num_os').value && !forcarNovo) return;
             const agora = new Date();
             const ano = agora.getFullYear();
             const mes = String(agora.getMonth() + 1).padStart(2, '0');
             const dia = String(agora.getDate()).padStart(2, '0');
             const horas = String(agora.getHours()).padStart(2, '0');
             const minutos = String(agora.getMinutes()).padStart(2, '0');
-            document.getElementById('num_os').value = `AC-${ano}${mes}${dia}${horas}${minutos}`;
+            const segundos = String(agora.getSeconds()).padStart(2, '0');
+            document.getElementById('num_os').value = `AC-${ano}${mes}${dia}-${horas}${minutos}${segundos}`;
+            if (forcarNovo) salvarCopiaNoHistorico();
         }
 
         function preencherHoraEDataAtual() {
             const agora = new Date();
             const horas = String(agora.getHours()).padStart(2, '0');
             const minutos = String(agora.getMinutes()).padStart(2, '0');
-            document.getElementById('input-hora').value = `${horas}:${minutos}`;
+            if (!document.getElementById('input-hora').value) {
+                document.getElementById('input-hora').value = `${horas}:${minutos}`;
+            }
+            if (!document.getElementById('os-data-campo').value) {
+                document.getElementById('os-data-campo').value = agora.toLocaleDateString('pt-BR');
+            }
         }
 
         function formatarMoeda(val) {
@@ -765,7 +966,7 @@
             recalcularTotaisGerais();
         }
 
-        function recalcularTotaisGerais() {
+        function recalcularTotaisGerais(atualizarHistorico = true) {
             const linhas = document.querySelectorAll('#corpo-tabela-itens tr');
             let totalPecas = 0;
 
@@ -782,7 +983,12 @@
 
             document.getElementById('lbl-total-pecas').innerText = formatarMoeda(totalPecas);
             document.getElementById('lbl-total-geral').innerText = formatarMoeda(totalGeral);
-            salvarDadosAutomaticamente();
+            
+            if (atualizarHistorico && !document.getElementById('etapa-os-documento').classList.contains('hidden')) {
+                salvarCopiaNoHistorico();
+            } else {
+                salvarDadosAutomaticamente();
+            }
         }
 
         function adicionarLinha(qtd = "1", codigo = "", detalhamento = "", vunit = "0,00", vtotal = "0,00") {
@@ -822,7 +1028,7 @@
                 </td>
             `;
             tbody.appendChild(tr);
-            recalcularTotaisGerais();
+            recalcularTotaisGerais(false);
         }
 
         function removerLinha(btn) {
@@ -906,11 +1112,13 @@
         }
 
         function gerarPDF() {
+            salvarCopiaNoHistorico();
             const elemento = document.getElementById('os-documento');
             html2pdf().set(obterOpcoesPDF()).from(elemento).save();
         }
 
         async function executarCompartilhamento() {
+            salvarCopiaNoHistorico();
             const elemento = document.getElementById('os-documento');
             let nomeCliente = document.getElementById('os-cliente').value.trim() || 'Cliente';
             nomeCliente = nomeCliente.replace(/[^a-zA-Z0-9À-ÿ\s]/g, '').replace(/\s+/g, '_');
@@ -944,8 +1152,8 @@
 
             const btnGerar = document.getElementById('btn-gerar-os');
             if (btnGerar) {
-                btnGerar.addEventListener('click', gerarOrdemDeServico);
-                btnGerar.addEventListener('touchend', (e) => { e.preventDefault(); gerarOrdemDeServico(); });
+                btnGerar.addEventListener('click', () => gerarOrdemDeServico(true));
+                btnGerar.addEventListener('touchend', (e) => { e.preventDefault(); gerarOrdemDeServico(true); });
             }
 
             const btnBaixar = document.getElementById('btn-baixar');
