@@ -172,7 +172,7 @@
 
     <main class="container">
       <div class="welcome-text">
-        <h2>Olá, Técnico!</h2>
+        <h2 id="saudacao-tecnico">Olá, Técnico!</h2>
         <p>Acompanhe suas ordens de serviços e mantenha seu trabalho sempre organizado.</p>
       </div>
 
@@ -197,12 +197,12 @@
           Orçamentos
         </a>
 
-        <a href="#" class="action-btn">
+        <a href="relatorios.html" class="action-btn">
           <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
           Relatórios
         </a>
 
-        <a href="#" class="action-btn">
+        <a href="configuracoes.html" class="action-btn">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           Configurações
         </a>
@@ -232,6 +232,17 @@
       </a>
     </nav>
   </div>
+
+  <script>
+    // Personaliza a saudação se o técnico salvou o nome nas configurações
+    window.addEventListener('DOMContentLoaded', () => {
+      const config = JSON.parse(localStorage.getItem('ac_configuracoes') || '{}');
+      if (config.nomeTecnico && config.nomeTecnico.trim() !== '') {
+        const primeiroNome = config.nomeTecnico.trim().split(' ')[0];
+        document.getElementById('saudacao-tecnico').innerText = `Olá, ${primeiroNome}!`;
+      }
+    });
+  </script>
 
 </body>
 </html>
