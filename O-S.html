@@ -477,7 +477,7 @@
                                 </div>
                                 <div class="col-span-4 flex items-center border-l border-black pl-1">
                                     <span class="font-bold mr-1 shrink-0">Hora:</span>
-                                    <input type="text" id="input-hora" oninput="salvarCopiaNoHistorico()" class="input-field font-bold">
+                                    <input type="text" id="input-hora" placeholder="00:00" oninput="salvarCopiaNoHistorico()" class="input-field font-bold">
                                 </div>
                             </div>
                         </td>
@@ -576,7 +576,7 @@
                             <input type="text" id="os-visto" oninput="salvarCopiaNoHistorico()" class="input-field text-center">
                         </td>
                         <td class="text-center align-middle p-0.5">
-                            <input type="text" id="os-data-campo" oninput="salvarCopiaNoHistorico()" class="input-field text-center">
+                            <input type="text" id="os-data-campo" placeholder="DD/MM/AAAA" oninput="salvarCopiaNoHistorico()" class="input-field text-center">
                         </td>
                         <td colspan="2" class="p-0 border-0"></td>
                     </tr>
@@ -740,8 +740,7 @@
             const numeroOS = dados.num_os || `AC-${Date.now()}`;
             
             let listaOS = JSON.parse(localStorage.getItem('ac_lista_os')) || [];
-            const agora = new Date();
-            const dataFormatada = `${agora.toLocaleDateString('pt-BR')} às ${dados.hora || agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}`;
+            const dataFormatada = dados.dataCampo ? `${dados.dataCampo}` : 'Não informada';
             const totalGeral = document.getElementById('lbl-total-geral').innerText || 'R$ 0,00';
 
             const indiceExistente = listaOS.findIndex(item => item.numero === numeroOS);
@@ -799,7 +798,7 @@
             if (dados.obs !== undefined) document.getElementById('os-obs').value = dados.obs;
             if (dados.visto !== undefined) document.getElementById('os-visto').value = dados.visto;
             if (dados.dataCampo !== undefined) document.getElementById('os-data-campo').value = dados.dataCampo;
-            if (dados.hora) document.getElementById('input-hora').value = dados.hora;
+            if (dados.hora !== undefined) document.getElementById('input-hora').value = dados.hora;
 
             const container = document.getElementById('lista-itens-mobile');
             container.innerHTML = '';
@@ -923,18 +922,6 @@
             const segundos = String(agora.getSeconds()).padStart(2, '0');
             document.getElementById('num_os').value = `AC-${ano}${mes}${dia}-${horas}${minutos}${segundos}`;
             if (forcarNovo) salvarCopiaNoHistorico();
-        }
-
-        function preencherHoraEDataAtual() {
-            const agora = new Date();
-            const horas = String(agora.getHours()).padStart(2, '0');
-            const minutos = String(agora.getMinutes()).padStart(2, '0');
-            if (!document.getElementById('input-hora').value) {
-                document.getElementById('input-hora').value = `${horas}:${minutos}`;
-            }
-            if (!document.getElementById('os-data-campo').value) {
-                document.getElementById('os-data-campo').value = agora.toLocaleDateString('pt-BR');
-            }
         }
 
         function formatarMoeda(val) {
@@ -1146,7 +1133,6 @@
         }
 
         window.onload = function() {
-            preencherHoraEDataAtual();
             carregarDadosSalvos();
 
             const btnGerar = document.getElementById('btn-gerar-os');
